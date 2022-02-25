@@ -47,6 +47,7 @@ class Bus_Activity : AppCompatActivity() {
             binding.BusfloatBtn
         )
         ClickSearchBtn()
+        //MVVMGOGO
 
 
     }
