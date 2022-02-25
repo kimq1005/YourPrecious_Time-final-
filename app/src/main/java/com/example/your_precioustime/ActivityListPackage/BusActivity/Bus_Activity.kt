@@ -58,7 +58,6 @@ class Bus_Activity : AppCompatActivity() {
             SetRecyclerView(citycode, StationEditName)
         }
 
-
     }
 
 
