@@ -1,20 +1,8 @@
-package com.example.your_precioustime.ActivityListPackage.FavoriteActivity.Subwayfavorite_DeepInfo
+package com.example.your_precioustime.activitylist_package.favorite_activity.subwayfavroite_deepinfo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.your_precioustime.ObjectManager.Myobject
-import com.example.your_precioustime.Retrofit.Retrofit_Manager.Companion.retrofitManager
-import com.example.your_precioustime.ActivityListPackage.SubwayActivity.SubwayAdapter
-import com.example.your_precioustime.Model.SubwayModel.SubwayModel
-import com.example.your_precioustime.Retrofit.Retrofit_Client
-import com.example.your_precioustime.Retrofit.Retrofit_InterFace
-import com.example.your_precioustime.Url
-import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.ActivitySubwayFavroiteDeevInfoBinding
-import retrofit2.Call
-import retrofit2.Response
 
 class Subway_FavroiteDeevInfo_test : AppCompatActivity() {
 

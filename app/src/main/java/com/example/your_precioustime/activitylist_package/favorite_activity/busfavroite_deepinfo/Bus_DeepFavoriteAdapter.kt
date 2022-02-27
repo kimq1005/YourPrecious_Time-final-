@@ -1,24 +1,14 @@
-package com.example.your_precioustime.ActivityListPackage.FavoriteActivity.BusFavroite_DeepInfo
+package com.example.your_precioustime.activitylist_package.favorite_activity.busfavroite_deepinfo
 
 import android.annotation.SuppressLint
-import android.os.AsyncTask
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.your_precioustime.App
-import com.example.your_precioustime.DB.BUSStationNameDataBase
-import com.example.your_precioustime.DB.BusFavroiteDataBase
 import com.example.your_precioustime.Model.Item
 import com.example.your_precioustime.ObjectManager.citycodeCallObject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
-import com.example.your_precioustime.R
-import com.example.your_precioustime.SecondActivity.DB.SubwayDB.TestFavoriteModel
-import com.example.your_precioustime.Util.Companion.TAG
-import com.example.your_precioustime.databinding.ActivityBusFavroiteDeepInfoBinding
 import com.example.your_precioustime.databinding.BusitemLayoutBinding
 
 @SuppressLint("StaticFieldLeak")

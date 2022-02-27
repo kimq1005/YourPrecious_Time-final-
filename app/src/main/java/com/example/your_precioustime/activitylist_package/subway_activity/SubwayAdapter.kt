@@ -1,4 +1,4 @@
-package com.example.your_precioustime.ActivityListPackage.SubwayActivity
+package com.example.your_precioustime.activitylist_package.subway_activity
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

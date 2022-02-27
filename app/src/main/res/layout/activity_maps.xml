@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        tools:context=".ActivityListPackage.BusActivity.MapsActivity" />
+        tools:context=".activitylist_package.bus_activity.MapsActivity" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

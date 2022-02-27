@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/underline"
-    tools:context=".ActivityListPackage.NoticeActivity.NoticeActivity">
+    tools:context=".activitylist_package.notice_activity.NoticeActivity">
 
     <View
         android:id="@+id/titleview"

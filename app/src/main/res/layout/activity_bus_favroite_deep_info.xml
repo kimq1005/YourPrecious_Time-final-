@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityListPackage.FavoriteActivity.BusFavroite_DeepInfo.Bus_FavroiteDeepInfo_Activity">
+    tools:context=".activitylist_package.favorite_activity.busfavroite_deepinfo.Bus_FavroiteDeepInfo_Activity">
 
     <View
         android:id="@+id/titleview"

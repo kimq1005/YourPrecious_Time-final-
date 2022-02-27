@@ -4,9 +4,9 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import com.example.your_precioustime.ActivityListPackage.BusActivity.Bus_Activity
-import com.example.your_precioustime.ActivityListPackage.FavoriteActivity.FavroiteActivity
-import com.example.your_precioustime.ActivityListPackage.SubwayActivity.Subway_Activity
+import com.example.your_precioustime.activitylist_package.bus_activity.Bus_Activity
+import com.example.your_precioustime.activitylist_package.favorite_activity.FavroiteActivity
+import com.example.your_precioustime.activitylist_package.subway_activity.Subway_Activity
 import com.google.android.material.snackbar.Snackbar
 
 class Myobject {

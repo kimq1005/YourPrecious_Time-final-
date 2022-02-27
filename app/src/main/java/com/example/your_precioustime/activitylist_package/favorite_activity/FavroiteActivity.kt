@@ -1,4 +1,4 @@
-package com.example.your_precioustime.ActivityListPackage.FavoriteActivity
+package com.example.your_precioustime.activitylist_package.favorite_activity
 
 import android.annotation.SuppressLint
 import android.os.AsyncTask

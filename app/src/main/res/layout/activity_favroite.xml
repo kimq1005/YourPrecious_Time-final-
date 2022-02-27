@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/underline"
-    tools:context=".ActivityListPackage.FavoriteActivity.FavroiteActivity">
+    tools:context=".activitylist_package.favorite_activity.FavroiteActivity">
 
     <View
         android:id="@+id/titleview"

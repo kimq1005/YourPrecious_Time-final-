@@ -1,13 +1,11 @@
-package com.example.your_precioustime.ActivityListPackage.FavoriteActivity
+package com.example.your_precioustime.activitylist_package.favorite_activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.your_precioustime.ActivityListPackage.FavoriteActivity.Subwayfavorite_DeepInfo.Subway_FavroiteDeevInfo_test
-import com.example.your_precioustime.ActivityListPackage.FavoriteActivity.Subwayfavorite_DeepInfo.Subway_FravoriteDeepInfo_Activity
+import com.example.your_precioustime.activitylist_package.favorite_activity.subwayfavroite_deepinfo.Subway_FravoriteDeepInfo_Activity
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.SecondActivity.DB.OnSubwayListDeleteInterFace
 import com.example.your_precioustime.SecondActivity.DB.SubwayNameEntity

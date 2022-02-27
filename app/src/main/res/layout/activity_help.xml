@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityListPackage.HelpActivity.HelpActivity">
+    tools:context=".activitylist_package.help_activity.HelpActivity">
 
     <View
         android:id="@+id/titleview"

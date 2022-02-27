@@ -9,15 +9,12 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
-import com.example.your_precioustime.ActivityListPackage.GuidActivity.GuideActivity
-import com.example.your_precioustime.ActivityListPackage.NoticeActivity.NoticeActivity
+import com.example.your_precioustime.activitylist_package.notice_activity.NoticeActivity
 import com.example.your_precioustime.ObjectManager.citycodeCallObject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
-import com.example.your_precioustime.ActivityListPackage.BusActivity.Bus_Activity
-import com.example.your_precioustime.ActivityListPackage.FavoriteActivity.FavroiteActivity
-import com.example.your_precioustime.ActivityListPackage.HelpActivity.HelpActivity
-import com.example.your_precioustime.ActivityListPackage.SubwayActivity.Subway_Activity
+import com.example.your_precioustime.activitylist_package.bus_activity.Bus_Activity
+import com.example.your_precioustime.activitylist_package.favorite_activity.FavroiteActivity
+import com.example.your_precioustime.activitylist_package.subway_activity.Subway_Activity
 import com.example.your_precioustime.databinding.ActivityRealMainListBinding
 import com.google.android.material.snackbar.Snackbar
 

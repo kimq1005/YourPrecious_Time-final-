@@ -1,21 +1,15 @@
-package com.example.your_precioustime.ActivityListPackage.FavoriteActivity.Subwayfavorite_DeepInfo
+package com.example.your_precioustime.activitylist_package.favorite_activity.subwayfavroite_deepinfo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.telecom.Call
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.your_precioustime.ActivityListPackage.SubwayActivity.SubwayAdapter
-import com.example.your_precioustime.Model.SubwayModel.SubwayModel
+import com.example.your_precioustime.activitylist_package.subway_activity.SubwayAdapter
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
 import com.example.your_precioustime.Retrofit.Retrofit_Manager
 import com.example.your_precioustime.Url
-import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.ActivitySubwayFavoriteDeepInfoBinding
-import com.google.android.gms.common.api.Response
-import javax.security.auth.callback.Callback
 
 
 class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.example.your_precioustime.ActivityListPackage.BusActivity
+package com.example.your_precioustime.activitylist_package.bus_activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

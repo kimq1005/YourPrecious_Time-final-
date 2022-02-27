@@ -22,20 +22,20 @@
         android:theme="@style/Theme.Your_PreciousTime"
         tools:targetApi="n">
         <activity
-            android:name=".ActivityListPackage.BusActivity.Bus_StationInfo_Activity"
+            android:name=".activitylist_package.bus_activity.Bus_StationInfo_Activity"
             android:exported="false" />
         <activity
-            android:name=".ActivityListPackage.FavoriteActivity.Subwayfavorite_DeepInfo.Subway_FravoriteDeepInfo_Activity"
+            android:name=".activitylist_package.favorite_activity.subwayfavroite_deepinfo.Subway_FravoriteDeepInfo_Activity"
             android:exported="false" />
         <activity
-            android:name=".ActivityListPackage.FavoriteActivity.BusFavroite_DeepInfo.Bus_FavroiteDeepInfo_Activity"
+            android:name=".activitylist_package.favorite_activity.busfavroite_deepinfo.Bus_FavroiteDeepInfo_Activity"
             android:exported="false" />
 
         <activity
-            android:name=".ActivityListPackage.HelpActivity.HelpActivity"
+            android:name=".activitylist_package.help_activity.HelpActivity"
             android:exported="false" />
         <activity
-            android:name=".ActivityListPackage.NoticeActivity.NoticeActivity"
+            android:name=".activitylist_package.notice_activity.NoticeActivity"
             android:exported="false" />
         <activity
             android:name=".ActivityListPackage.GuidActivity.GuideActivity"
@@ -62,22 +62,22 @@
             android:exported="false" />
 
         <activity
-            android:name=".ActivityListPackage.BusActivity.MapsActivity"
+            android:name=".activitylist_package.bus_activity.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
 
         <activity
-            android:name=".ActivityListPackage.BusActivity.Bus_Activity"
+            android:name=".activitylist_package.bus_activity.Bus_Activity"
             android:exported="false" />
 
         <activity
-            android:name=".ActivityListPackage.FavoriteActivity.DeepStationInfoActivity"
+            android:name=".activitylist_package.favorite_activity.DeepStationInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ActivityListPackage.SubwayActivity.Subway_Activity"
+            android:name=".activitylist_package.subway_activity.Subway_Activity"
             android:exported="false" />
         <activity
-            android:name=".ActivityListPackage.FavoriteActivity.FavroiteActivity"
+            android:name=".activitylist_package.favorite_activity.FavroiteActivity"
             android:exported="false" />
 
 <!--        <activity-->

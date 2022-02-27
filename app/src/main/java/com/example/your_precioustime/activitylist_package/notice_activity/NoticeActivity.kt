@@ -1,4 +1,4 @@
-package com.example.your_precioustime.ActivityListPackage.NoticeActivity
+package com.example.your_precioustime.activitylist_package.notice_activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityListPackage.FavoriteActivity.Subwayfavorite_DeepInfo.Subway_FravoriteDeepInfo_Activity">
+    tools:context=".activitylist_package.favorite_activity.subwayfavroite_deepinfo.Subway_FravoriteDeepInfo_Activity">
 
     <View
         android:id="@+id/titleview"

@@ -5,7 +5,7 @@
     android:id="@+id/subway_Activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityListPackage.SubwayActivity.Subway_Activity">
+    tools:context=".activitylist_package.subway_activity.Subway_Activity">
 
 
     <View

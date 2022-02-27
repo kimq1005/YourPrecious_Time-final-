@@ -1,14 +1,12 @@
-package com.example.your_precioustime.ActivityListPackage.FavoriteActivity
+package com.example.your_precioustime.activitylist_package.favorite_activity
 
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.your_precioustime.ActivityListPackage.FavoriteActivity.BusFavroite_DeepInfo.Bus_FavoriteDeepInfo_test
-import com.example.your_precioustime.ActivityListPackage.FavoriteActivity.BusFavroite_DeepInfo.Bus_FavroiteDeepInfo_Activity
+import com.example.your_precioustime.activitylist_package.favorite_activity.busfavroite_deepinfo.Bus_FavroiteDeepInfo_Activity
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.SecondActivity.DB.OnDeleteInterFace
