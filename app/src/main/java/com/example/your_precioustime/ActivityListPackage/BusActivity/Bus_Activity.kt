@@ -21,7 +21,6 @@ class Bus_Activity : AppCompatActivity() {
     private val binding get() = busBinding!!
 
     lateinit var busStationSearchAdapter: Bus_Station_Search_Adapter
-
     private var retrofitInterface: Retrofit_InterFace = Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
 
 
@@ -29,6 +28,7 @@ class Bus_Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         busBinding = ActivityBusBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
 
@@ -48,8 +48,6 @@ class Bus_Activity : AppCompatActivity() {
         )
         ClickSearchBtn()
         //MVVMGOGO
-
-
     }
 
     private fun ClickSearchBtn() = with(binding) {
@@ -88,7 +86,6 @@ class Bus_Activity : AppCompatActivity() {
 
             override fun onFailure(call: Call<StationBus>, t: Throwable) {
                 Log.d(Util.TAG, "onFailure:$t")
-
 
             }
 
