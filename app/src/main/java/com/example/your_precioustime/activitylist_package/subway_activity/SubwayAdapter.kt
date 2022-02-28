@@ -13,21 +13,13 @@ import com.example.your_precioustime.ObjectManager.Myobject
 class SubwayAdapter : RecyclerView.Adapter<SubwayAdapter.MyViewHolder>() {
 
     lateinit var subwayItem: List<SubwayItem>
-//    lateinit var hi:MutableList<String>
+
 
 
     inner class MyViewHolder(val binding: SubwayItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(subwayItem: SubwayItem) {
-            val mytext = Myobject.myobject.changeSubwayText(subwayItem.arvlMsg2.toString())
-            val trainLineNmtext =
-                Myobject.myobject.changeSubwayResultText(subwayItem.trainLineNm.toString())
-
-
-            binding.subwayitemSubwayId.text = subwayItem.subwayId
-            binding.subwayitemTrainLineNm.text = trainLineNmtext
-            binding.subwayitemBstatnNm.text = subwayItem.bstatnNm
-            binding.subwayitemBarvlDt.text = mytext
+            binding.subwayItem = subwayItem
 
         }
     }

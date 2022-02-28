@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.mo_del.SubwayItem
 import com.example.your_precioustime.Model.SubwayModel.SubwayModel
@@ -28,6 +30,8 @@ class Subway_Activity : AppCompatActivity() {
     private var subwayBinding: ActivitySubwayBinding? = null
     private val binding get() = subwayBinding!!
 
+    private lateinit var subwayViewModel: SubwayViewModel
+
     private var retrofitInterface =
         Retrofit_Client.getJsonClienet(SEOUL_SUBWAY_MAIN_URL).create(Retrofit_InterFace::class.java)
 
@@ -41,6 +45,7 @@ class Subway_Activity : AppCompatActivity() {
         setContentView(binding.root)
 
         subwayDataBase = SubwayDataBase.getinstance(this)!!
+        subwayViewModel = ViewModelProvider(this).get(SubwayViewModel::class.java)
 
         Myobject.myobject.ToggleSet(
             this,
@@ -91,20 +96,9 @@ class Subway_Activity : AppCompatActivity() {
     }
 
 
-    private fun setRecyclerView(subwayItem: List<SubwayItem>) {
-        subwayAdapter = SubwayAdapter()
-
-
-        binding.subwayRecyclerView.apply {
-            adapter = subwayAdapter
-            layoutManager = LinearLayoutManager(context)
-            subwayAdapter.submitList(subwayItem)
-        }
-
-
-    }
 
     private fun getsubwayCall(statNm: String) {
+        subwayAdapter = SubwayAdapter()
 
         val call = retrofitInterface.SUBWAYGET(
             statnNm = statNm
@@ -213,7 +207,17 @@ class Subway_Activity : AppCompatActivity() {
                         }
                     }
 
-                    setRecyclerView(subwaymodel)
+                    //LiveData, ViewModel
+                    subwayViewModel.setSubwayItem(subwaymodel)
+                    subwayViewModel.subwayItem.observe(this@Subway_Activity, Observer { it->
+                        binding.subwayRecyclerView.apply {
+                            adapter = subwayAdapter
+                            layoutManager = LinearLayoutManager(context)
+                            subwayAdapter.submitList(it)
+                        }
+
+                    })
+
                 }
 
 

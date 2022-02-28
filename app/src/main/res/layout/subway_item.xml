@@ -1,83 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/subwayitem_root"
-    android:layout_width="match_parent"
-    android:layout_height="85dp"
->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="subwayItem"
+            type="com.example.your_precioustime.mo_del.SubwayItem"/>
+    </data>
 
-    <TextView
-        android:id="@+id/subwayitem_subwayId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:text="수인분당"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/subwayitem_trainLineNm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="역삼"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/subwayitem_subwayId"
-        app:layout_constraintTop_toBottomOf="@id/subwayitem_subwayId" />
-
-    <TextView
-        android:id="@+id/subwayitem_barvlDt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:text="5전"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/subwayitem_subwayId" />
-
-
-    <LinearLayout
-        android:id="@+id/subwayLinearlayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="7dp"
-        app:layout_constraintEnd_toEndOf="@id/subwayitem_barvlDt"
-        app:layout_constraintTop_toBottomOf="@+id/subwayitem_barvlDt">
-
-        <TextView
-            android:id="@+id/subwayitem_bstatnNm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="왕십리"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subwayitem_trainLineNm" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="행"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subwayitem_trainLineNm" />
-
-
-    </LinearLayout>
-
-
-    <View
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/subwayitem_root"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/underline"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="85dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/subwayitem_subwayId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@{subwayItem.subwayId}"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/subwayitem_trainLineNm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{subwayItem.trainLineNmtext}"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/subwayitem_subwayId"
+            app:layout_constraintTop_toBottomOf="@id/subwayitem_subwayId" />
+
+        <TextView
+            android:id="@+id/subwayitem_barvlDt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:text="@{subwayItem.mytext}"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/subwayitem_subwayId" />
+
+
+        <LinearLayout
+            android:id="@+id/subwayLinearlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="7dp"
+            app:layout_constraintEnd_toEndOf="@id/subwayitem_barvlDt"
+            app:layout_constraintTop_toBottomOf="@+id/subwayitem_barvlDt">
+
+            <TextView
+                android:id="@+id/subwayitem_bstatnNm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{subwayItem.bstatnNm}"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subwayitem_trainLineNm" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="행"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subwayitem_trainLineNm" />
+
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/underline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

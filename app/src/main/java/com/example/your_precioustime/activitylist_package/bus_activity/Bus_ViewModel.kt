@@ -15,6 +15,7 @@ class Bus_ViewModel:ViewModel() {
     // Bus_Activity의 버스검색 데이터
     private val _stationItem = MutableLiveData<List<StationItem>>()
 
+    // Bus_StationInfo의 데이터
     private val _stationinfoItem = MutableLiveData<List<Item>>()
 
 
