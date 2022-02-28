@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.your_precioustime.Model.Bus
-import com.example.your_precioustime.Model.Item
+import com.example.your_precioustime.mo_del.Bus
+import com.example.your_precioustime.mo_del.Item
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
@@ -74,9 +74,11 @@ class Bus_FavoriteDeepInfo_test : AppCompatActivity() {
                         waittime = wow.get(i).arrtime!!
 
 
-                        mylist.add(Item(
+                        mylist.add(
+                            Item(
                             busNm,waitbus,waittime
-                        ))
+                        )
+                        )
 
                         val firstList= mylist.filterIndexed { index, i ->
 //                        Log.d(TAG, "인덱스값이 뭔지 확인하기 : $index , $i")
@@ -109,8 +111,6 @@ class Bus_FavoriteDeepInfo_test : AppCompatActivity() {
                                         ResultList.add(Item(ARouteNo,AWaitstation,AWaitTime))
                                     }
 
-//                                    Log.d(TAG, "지막 그거여 확인혀: $ResultList")
-                                    Log.d(TAG, "onResponse:내가 뭘할까 이련아")
                                 }
 
 
@@ -120,7 +120,6 @@ class Bus_FavoriteDeepInfo_test : AppCompatActivity() {
 
                             FravroitestationinfoRecyclerView.apply {
                                 adapter = DFadapter
-//                                layoutManager = GridLayoutManager(this@FavoriteDeepInfo,2,GridLayoutManager.VERTICAL,false)
                                 layoutManager = LinearLayoutManager(context)
                                 DFadapter.submitList(ResultList)
                             }

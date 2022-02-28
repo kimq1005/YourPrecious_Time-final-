@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.your_precioustime.Model.SubwayItem
+import com.example.your_precioustime.mo_del.SubwayItem
 import com.example.your_precioustime.Model.SubwayModel.SubwayModel
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.R

@@ -5,12 +5,14 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.App
 import com.example.your_precioustime.DB.BusFavroiteDataBase
-import com.example.your_precioustime.Model.Bus
-import com.example.your_precioustime.Model.Item
-import com.example.your_precioustime.Model.StationBus
+import com.example.your_precioustime.mo_del.Bus
+import com.example.your_precioustime.mo_del.Item
+import com.example.your_precioustime.mo_del.StationBus
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.R
@@ -34,7 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    private lateinit var busMaps_Adapater: BusMaps_Adpater
+    private lateinit var busStationInfo_Adapater: BusStationInfo_Adpater
     lateinit var busFavoriteDB: BusFavroiteDataBase
     lateinit var activitybusfavoriteEntity: List<TestFavoriteModel>
 
@@ -42,7 +44,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var retrofitInterface: Retrofit_InterFace =
         Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
 
-    lateinit var busStationSearchAdapter: Bus_Station_Search_Adapter
+    private lateinit var busViewmodel: Bus_ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
 
         binding.backbtn.setOnClickListener {
             onBackPressed()
@@ -103,11 +107,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onResponse(call: Call<StationBus>, response: Response<StationBus>) {
                 val body = response.body()
-                busMaps_Adapater = BusMaps_Adpater()
 
                 val myLocationlatlng = LatLngBounds.Builder()
-                Log.d(TAG, "setMapView: $body")
-                busStationSearchAdapter = Bus_Station_Search_Adapter()
 
                 body?.let { it ->
                     val hello = body.body.items.item
@@ -129,7 +130,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onFailure(call: Call<StationBus>, t: Throwable) {
-                Log.d(Util.TAG, "onFailure:$t")
+                Log.d(TAG, "onFailure:$t")
 
             }
 
@@ -150,23 +151,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         call.enqueue(object : retrofit2.Callback<Bus> {
             override fun onResponse(call: Call<Bus>, response: Response<Bus>) {
-                busMaps_Adapater = BusMaps_Adpater()
+                busStationInfo_Adapater = BusStationInfo_Adpater()
 
                 val body = response.body()
 
                 body?.let {
-                    val hello = body.body.items.item
+                    val itemList = body.body.items.item
 
                     val hi = mutableListOf<Item>()
 
-                    for (i in hello.indices) {
+                    for (i in itemList.indices) {
                         val busNm: String
                         val waitbus: Int
                         val waittime: Int
 
-                        busNm = hello.get(i).routeno!!
-                        waitbus = hello.get(i).arrprevstationcnt!!
-                        waittime = hello.get(i).arrtime!!
+                        busNm = itemList.get(i).routeno!!
+                        waitbus = itemList.get(i).arrprevstationcnt!!
+                        waittime = itemList.get(i).arrtime!!
 
                         hi.add(
                             Item(
@@ -215,11 +216,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         }
 
-                        busreclerView.apply {
-                            adapter = busMaps_Adapater
-                            layoutManager = LinearLayoutManager(context)
-                            busMaps_Adapater.submitList(ResultList)
-                        }
+                        busViewmodel.setStationInfoItem(ResultList)
+                        busViewmodel.stationinfoItem.observe(this@MapsActivity, Observer {
+                            busreclerView.apply {
+                                adapter = busStationInfo_Adapater
+                                layoutManager = LinearLayoutManager(context)
+                                busStationInfo_Adapater.submitList(it)
+                            }
+                        })
+
+
 
 
                     }

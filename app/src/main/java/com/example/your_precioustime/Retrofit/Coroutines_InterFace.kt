@@ -1,9 +1,7 @@
 package com.example.your_precioustime.Retrofit
 
-import com.example.your_precioustime.Model.StationBus
-import com.example.your_precioustime.Model.StationItem
+import com.example.your_precioustime.mo_del.StationBus
 import com.example.your_precioustime.Url
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

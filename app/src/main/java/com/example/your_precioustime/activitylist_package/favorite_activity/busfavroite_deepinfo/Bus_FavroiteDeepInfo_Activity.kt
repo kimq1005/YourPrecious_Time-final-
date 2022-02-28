@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.your_precioustime.Model.Bus
-import com.example.your_precioustime.Model.Item
+import com.example.your_precioustime.mo_del.Bus
+import com.example.your_precioustime.mo_del.Item
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace

@@ -1,17 +1,15 @@
 package com.example.your_precioustime.Retrofit
 
-import com.example.your_precioustime.Model.*
-import com.example.your_precioustime.Model.OdsayModel.OdasyModel
 import com.example.your_precioustime.Model.PoiModel.MapPoiModel
-import com.example.your_precioustime.Model.SubwayModel.ErrorMessage
 import com.example.your_precioustime.Model.SubwayModel.SubwayModel
 
 
 import com.example.your_precioustime.Url
+import com.example.your_precioustime.mo_del.Bus
+import com.example.your_precioustime.mo_del.StationBus
 import com.google.gson.JsonElement
 import retrofit2.Call
 import retrofit2.http.*
-import retrofit2.http.Header
 
 interface Retrofit_InterFace {
 

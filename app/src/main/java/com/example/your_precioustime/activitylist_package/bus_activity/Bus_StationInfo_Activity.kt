@@ -6,11 +6,13 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.App
 import com.example.your_precioustime.DB.BusFavroiteDataBase
-import com.example.your_precioustime.Model.Bus
-import com.example.your_precioustime.Model.Item
+import com.example.your_precioustime.mo_del.Bus
+import com.example.your_precioustime.mo_del.Item
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.R
@@ -30,13 +32,13 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
     private val binding get() = busStationinfoBinding!!
 
 
-    private lateinit var busMaps_Adapater: BusMaps_Adpater
+    private lateinit var busStationInfo_Adapater: BusStationInfo_Adpater
     lateinit var busFavoriteDB: BusFavroiteDataBase
+
     lateinit var activitybusfavoriteEntity: List<TestFavoriteModel>
 
-    private var retrofitInterface: Retrofit_InterFace =
-        Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
-
+    private var retrofitInterface: Retrofit_InterFace = Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
+    private lateinit var busViewmodel: Bus_ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         setContentView(binding.root)
 
         busFavoriteDB = BusFavroiteDataBase.getinstance(App.instance)!!
+        busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
 
         binding.backbtn.setOnClickListener {
             onBackPressed()
@@ -63,15 +66,15 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         }
 
         binding.sharecardView.setOnClickListener {
-
+            //
         }
 
 
         SetFreshView()
-        SetBusStationRecyclerView()
+        LiveDataSetBusStationRecyclerView()
         busFavoriteGetAll()
         savemystation()
-        //즐겨찾기
+
 
         Myobject.myobject.ToggleSet(
             this,
@@ -91,6 +94,112 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         }
     }
 
+    private fun LiveDataSetBusStationRecyclerView() = with(binding){
+        val stationName = intent.getStringExtra("stationName").toString()
+        binding.BusInfoTitleTextView.text = stationName
+        binding.titleviewTitleTextView.text = stationName
+
+        val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
+        val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+
+        val call = retrofitInterface.BusGet(citycode, stationNodeNumber)
+        call.enqueue(object : retrofit2.Callback<Bus> {
+            override fun onResponse(call: Call<Bus>, response: Response<Bus>) {
+                busStationInfo_Adapater = BusStationInfo_Adpater()
+
+                val body = response.body()
+
+                body?.let {
+                    val itemList = body.body.items.item
+                    val hi = mutableListOf<Item>()
+                    for (i in itemList.indices) {
+                        val busNm: String
+                        val waitbus: Int
+                        val waittime: Int
+
+                        busNm = itemList.get(i).routeno!!
+                        waitbus = itemList.get(i).arrprevstationcnt!!
+                        waittime = itemList.get(i).arrtime!!
+
+                        hi.add(
+                            Item(
+                                busNm, waitbus, waittime
+                            )
+                        )
+
+                    }
+                    Log.d(Util.TAG, "\n 전체값 리스트 : $hi \n")
+
+
+                    val firstList = hi.filterIndexed { index, i ->
+
+                        index % 2 == 0
+                    }
+
+
+                    val secondList = hi.filterIndexed { index, item ->
+                        index % 2 == 1
+                    }
+
+
+                    val ResultList = mutableListOf<Item>()
+
+
+                    firstList.forEach {
+                        val ARouteNo = it.routeno
+                        val AWaitstation = it.arrprevstationcnt
+                        val AWaitTime = it.arrtime
+
+
+                        secondList.forEach {
+                            val BRouteNo = it.routeno
+                            val BWaitstation = it.arrprevstationcnt
+
+                            if (ARouteNo == BRouteNo) {
+                                if (AWaitstation!! > BWaitstation!!) {
+                                    ResultList.add(
+                                        Item(
+                                            it.routeno,
+                                            it.arrprevstationcnt,
+                                            it.arrtime
+                                        )
+                                    )
+
+                                } else {
+                                    ResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
+                                }
+                            }
+
+                        }
+
+                        //viewmodelCall
+                        busViewmodel.setStationInfoItem(ResultList)
+
+
+                        busViewmodel.stationinfoItem.observe(this@Bus_StationInfo_Activity, Observer {it->
+                            BusStationInfoRecyclerView.apply {
+                                adapter = busStationInfo_Adapater
+                                layoutManager = LinearLayoutManager(context)
+                                busStationInfo_Adapater.submitList(it)
+                            }
+                        })
+
+
+
+
+                    }
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<Bus>, t: Throwable) {
+                Log.d(Util.TAG, "오류: $t")
+            }
+
+        })
+    }
+
 
     private fun SetBusStationRecyclerView() = with(binding) {
 
@@ -104,7 +213,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         val call = retrofitInterface.BusGet(citycode, stationNodeNumber)
         call.enqueue(object : retrofit2.Callback<Bus> {
             override fun onResponse(call: Call<Bus>, response: Response<Bus>) {
-                busMaps_Adapater = BusMaps_Adpater()
+                busStationInfo_Adapater = BusStationInfo_Adpater()
 
                 val body = response.body()
 
@@ -173,9 +282,9 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
                         }
 
                         BusStationInfoRecyclerView.apply {
-                            adapter = busMaps_Adapater
+                            adapter = busStationInfo_Adapater
                             layoutManager = LinearLayoutManager(context)
-                            busMaps_Adapater.submitList(ResultList)
+                            busStationInfo_Adapater.submitList(ResultList)
                         }
 
 

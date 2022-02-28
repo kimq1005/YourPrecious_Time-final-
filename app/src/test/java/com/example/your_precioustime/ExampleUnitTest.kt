@@ -1,6 +1,5 @@
 package com.example.your_precioustime
 
-import com.example.your_precioustime.Model.Item
 import org.junit.Test
 
 import org.junit.Assert.*

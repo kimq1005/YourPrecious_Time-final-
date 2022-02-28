@@ -1,4 +1,4 @@
-package com.example.your_precioustime.Model
+package com.example.your_precioustime.mo_del
 
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
@@ -30,7 +30,7 @@ data class CityHeader(
 @Xml(name="body")
 data class CityBody(
     @Element
-    val items:Cityitems?
+    val items: Cityitems?
 )
 
 @Xml

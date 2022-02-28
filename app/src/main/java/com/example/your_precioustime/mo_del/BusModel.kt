@@ -1,12 +1,10 @@
-package com.example.your_precioustime.Model
+package com.example.your_precioustime.mo_del
 
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
-import org.simpleframework.xml.Root
 
 import java.io.Serializable
-import javax.xml.bind.annotation.*
 
 data class BusModel(
     val nodeid:String,
@@ -149,6 +147,13 @@ data class Item(
 
 ){
     constructor() : this(null,null,null)
+
+    val mytime : String
+        get(){
+            val converttime = arrtime?.div(60)
+
+            return converttime.toString()
+        }
 }
 
 

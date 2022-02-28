@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.your_precioustime.Model.SubwayItem
+import com.example.your_precioustime.mo_del.SubwayItem
 import com.example.your_precioustime.R
 import com.example.your_precioustime.databinding.SubwayItemBinding
 import com.example.your_precioustime.ObjectManager.Myobject

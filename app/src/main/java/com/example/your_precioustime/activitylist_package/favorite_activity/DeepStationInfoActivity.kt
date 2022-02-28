@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.your_precioustime.activitylist_package.bus_activity.BusMaps_Adpater
+import com.example.your_precioustime.activitylist_package.bus_activity.BusStationInfo_Adpater
 import com.example.your_precioustime.App
 import com.example.your_precioustime.DB.BusFavroiteDataBase
-import com.example.your_precioustime.Model.Bus
-import com.example.your_precioustime.Model.Item
+import com.example.your_precioustime.mo_del.Bus
+import com.example.your_precioustime.mo_del.Item
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.R
@@ -31,7 +31,7 @@ class DeepStationInfoActivity : AppCompatActivity() {
     private var deepStationbinding: ActivityDeepStationInfoBinding? = null
     private val binding get() = deepStationbinding!!
 
-    private lateinit var busMaps_Adpater: BusMaps_Adpater
+    private lateinit var busStationInfo_Adpater: BusStationInfo_Adpater
 
     lateinit var busFavoriteDB: BusFavroiteDataBase
     lateinit var activitybusfavoriteEntity: List<TestFavoriteModel>
@@ -98,7 +98,7 @@ class DeepStationInfoActivity : AppCompatActivity() {
         call.enqueue(object : retrofit2.Callback<Bus> {
             override fun onResponse(call: Call<Bus>, response: Response<Bus>) {
                 Log.d(TAG, "onResponse: ${response.body()}")
-                busMaps_Adpater = BusMaps_Adpater()
+                busStationInfo_Adpater = BusStationInfo_Adpater()
 
                 val body = response.body()
 
@@ -117,9 +117,9 @@ class DeepStationInfoActivity : AppCompatActivity() {
                         waittime = hello.get(i).arrtime!!
 
                         deepstationinfoRecyclerView.apply {
-                            adapter = busMaps_Adpater
+                            adapter = busStationInfo_Adpater
                             layoutManager = LinearLayoutManager(context)
-                            busMaps_Adpater.submitList(hello)
+                            busStationInfo_Adpater.submitList(hello)
                         }
 
                         hi.add(

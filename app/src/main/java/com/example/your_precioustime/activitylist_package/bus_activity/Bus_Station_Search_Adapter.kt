@@ -5,7 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.your_precioustime.Model.StationItem
+import com.example.your_precioustime.mo_del.StationItem
 import com.example.your_precioustime.databinding.BusStationSearchitemLayoutBinding
 
 class Bus_Station_Search_Adapter : RecyclerView.Adapter<Bus_Station_Search_Adapter.MyViewHolder>() {
@@ -13,9 +13,10 @@ class Bus_Station_Search_Adapter : RecyclerView.Adapter<Bus_Station_Search_Adapt
 
     inner class MyViewHolder(val binding: BusStationSearchitemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        //dataBinding
         fun bind(stationItem: StationItem) {
-            binding.StationNameTextView.text = stationItem.nodenm
-            binding.StationNodeIDTextView.text = stationItem.nodeno
+            binding.stationitem = stationItem
         }
     }
 

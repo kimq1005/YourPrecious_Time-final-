@@ -1,10 +1,10 @@
 package com.example.your_precioustime.Retrofit
 
 import android.util.Log
-import com.example.your_precioustime.Model.*
 import com.example.your_precioustime.Model.SubwayModel.SubwayModel
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util.Companion.TAG
+import com.example.your_precioustime.mo_del.SubwayItem
 import retrofit2.Call
 import retrofit2.Response
 

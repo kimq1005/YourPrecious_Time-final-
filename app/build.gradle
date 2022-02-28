@@ -37,6 +37,11 @@ android {
     viewBinding{
         enabled = true
     }
+
+    buildFeatures {
+        dataBinding true
+    }
+
     buildFeatures {
         viewBinding true
     }
@@ -88,4 +93,10 @@ dependencies {
 
     //새로고침
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    // ViewModel - 라이프 사이클
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+
+    // LiveData - 데이터의 변경 사항을 알 수 있음
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
 }
