@@ -10,7 +10,7 @@ interface Bus_FavroiteDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun busFavoriteInsert(busFavoriteEntity: BusFavoriteEntity)
 
-    @Query("SELECT * FROM BusFavoriteEntity")
+    @Query("SELECT * FROM busFavoriteEntity")
     fun busFavoriteGetAll() : LiveData<List<BusFavoriteEntity>>
 
     @Delete
