@@ -51,7 +51,10 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
         busFavoriteDB = BusFavroiteDataBase.getinstance(App.instance)!!
         busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
-        busRoomviewmodel = ViewModelProvider(this, Bus_RoomViewModel.Factory(application)).get(Bus_RoomViewModel::class.java)
+        busRoomviewmodel = ViewModelProvider(
+            this,
+            Bus_RoomViewModel.Factory(application)
+        ).get(Bus_RoomViewModel::class.java)
 
         binding.backbtn.setOnClickListener {
             onBackPressed()
@@ -77,10 +80,8 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
         SetFreshView()
         LiveDataSetBusStationRecyclerView()
-
-        busRoomFavroiteInsert()
+//        busRoomFavroiteInsert()
         busFavoriteChecking()
-
 
 
 //        busFavoriteGetAll()
@@ -100,7 +101,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
     private fun SetFreshView() {
         binding.BusInfoStationSwipeLayout.setOnRefreshListener {
-            SetBusStationRecyclerView()
+            LiveDataSetBusStationRecyclerView()
             binding.BusInfoStationSwipeLayout.isRefreshing = false
         }
     }
@@ -210,6 +211,67 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
         })
     }
+
+
+    //버스 즐겨찾기 추가
+    private fun busRoomFavroiteInsert() {
+        binding.favroiteaddImage.setOnClickListener {
+
+            val stationName = intent.getStringExtra("stationName").toString()
+            val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
+            val stationNodeNode = intent.getStringExtra("stationnodenode").toString()
+            val stationcitycode =
+                citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+
+
+
+            busRoomviewmodel.businsert(
+                citycode = stationcitycode,
+                stationnodenode = stationNodeNode,
+                stationName = stationName,
+                stationNodeNumber = stationNodeNumber
+            )
+
+            Myobject.myobject.FavroiteSnackBar(binding.BusStationInfoActivity)
+        }
+
+
+    }
+
+    //버스 즐겨찾기 확인
+    private fun busFavoriteChecking() {
+
+        busRoomviewmodel.busgetAll().observe(this, Observer { BusFavroiteEntity ->
+            Log.d(Util.TAG, "무야호홓옹오오ㅗㅇ : $BusFavroiteEntity ")
+
+            val stationnameList = mutableListOf<String>()
+
+            for (i in BusFavroiteEntity.indices) {
+                val stationname = BusFavroiteEntity.get(i).stationName
+                stationnameList.add(stationname)
+            }
+
+            if (binding.BusInfoTitleTextView.text in stationnameList) {
+                binding.favroiteaddImage.setImageResource(R.drawable.fullstar)
+
+                binding.favroiteaddImage.setOnClickListener {
+                    Myobject.myobject.alreadyFavroiteSnackBar(binding.BusStationInfoActivity)
+                }
+
+            } else {
+                binding.favroiteaddImage.setImageResource(R.drawable.whitestar)
+                busRoomFavroiteInsert()
+
+
+            }
+
+
+        })
+
+    }
+
+
+
 
 
     private fun SetBusStationRecyclerView() = with(binding) {
@@ -380,7 +442,6 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
     }
 
 
-
     private fun savemystation() = with(binding) {
 
         favroiteaddImage.setOnClickListener {
@@ -398,54 +459,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
                 stationName = stationName,
                 stationNodeNumber = stationNodeNumber
             )
-            BUSFravoriteInsert(FavroiteModel)
+//            BUSFravoriteInsert(FavroiteModel)
         }
-    }
-
-    private fun busRoomFavroiteInsert() {
-        binding.favroiteaddImage.setOnClickListener {
-
-            val stationName = intent.getStringExtra("stationName").toString()
-            val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
-            val stationNodeNode = intent.getStringExtra("stationnodenode").toString()
-            val stationcitycode =
-                citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-
-
-
-            busRoomviewmodel.businsert(
-                citycode = stationcitycode,
-                stationnodenode = stationNodeNode,
-                stationName = stationName,
-                stationNodeNumber = stationNodeNumber
-            )
-
-        }
-
-
-    }
-
-    private fun busFavoriteChecking() {
-
-        busRoomviewmodel.busgetAll().observe(this, Observer { BusFavroiteEntity ->
-            Log.d(Util.TAG, "무야호홓옹오오ㅗㅇ : $BusFavroiteEntity ")
-
-            val stationnameList = mutableListOf<String>()
-
-            for (i in BusFavroiteEntity.indices) {
-                val stationname = BusFavroiteEntity.get(i).stationName
-                stationnameList.add(stationname)
-            }
-
-            if (binding.BusInfoTitleTextView.text in stationnameList) {
-                binding.favroiteaddImage.setImageResource(R.drawable.fullstar)
-            } else {
-                binding.favroiteaddImage.setImageResource(R.drawable.whitestar)
-            }
-
-
-
-        })
-
     }
 }
