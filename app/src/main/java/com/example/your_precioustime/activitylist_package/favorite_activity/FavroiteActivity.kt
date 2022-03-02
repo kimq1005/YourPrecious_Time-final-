@@ -33,6 +33,10 @@ class FavroiteActivity : AppCompatActivity(), OnDeleteInterFace, OnSubwayListDel
     lateinit var subwayNameEntity: List<SubwayNameEntity>
     lateinit var subwayfavoriteAdpater: SubwayFavorite_Adpater
 
+    // 아래부터 추가 작업
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         favroiteBinding = ActivityFavroiteBinding.inflate(layoutInflater)
@@ -55,8 +59,14 @@ class FavroiteActivity : AppCompatActivity(), OnDeleteInterFace, OnSubwayListDel
             binding.BusfloatBtn
         )
 
-        getAll()
-        subwaygetAll()
+//        getAll()
+//        subwaygetAll()
+
+
+    }
+
+
+    private fun busFavoriteListSetRecyclerView(){
 
     }
 

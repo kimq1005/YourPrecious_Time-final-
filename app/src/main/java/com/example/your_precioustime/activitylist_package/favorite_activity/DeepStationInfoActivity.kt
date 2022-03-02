@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.activitylist_package.bus_activity.BusStationInfo_Adpater
 import com.example.your_precioustime.App
@@ -22,6 +24,8 @@ import com.example.your_precioustime.SecondActivity.DB.SubwayDB.TestFavoriteMode
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.ActivityDeepStationInfoBinding
+import com.example.your_precioustime.roompackage.bus_room.BusFavoriteEntity
+import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
 import retrofit2.Call
 import retrofit2.Response
 
@@ -39,6 +43,9 @@ class DeepStationInfoActivity : AppCompatActivity() {
     private val retrofitInterface: Retrofit_InterFace =
         Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
 
+    ///////////////////////////////////////////////////////////////////
+    private lateinit var busRoomviewmodel: Bus_RoomViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         deepStationbinding = ActivityDeepStationInfoBinding.inflate(layoutInflater)
@@ -53,6 +60,11 @@ class DeepStationInfoActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        busRoomviewmodel = ViewModelProvider(
+            this,
+            Bus_RoomViewModel.Factory(application)
+        ).get(Bus_RoomViewModel::class.java)
+
         Myobject.myobject.ToggleSet(
             this,
             binding.floatingBtn,
@@ -61,9 +73,15 @@ class DeepStationInfoActivity : AppCompatActivity() {
             binding.BusfloatBtn
         )
 
-        busFavoriteGetAll()
+//        busFavoriteGetAll()
+
+        //   savemystation()
+
         SetBusStationRecyclerView()
-        savemystation()
+
+
+
+
     }
 
 
@@ -83,7 +101,7 @@ class DeepStationInfoActivity : AppCompatActivity() {
                 stationName = stationName,
                 stationNodeNumber = stationNodeNumber
             )
-            BUSFravoriteInsert(hello)
+//            BUSFravoriteInsert(hello)
         }
     }
 
@@ -193,8 +211,6 @@ class DeepStationInfoActivity : AppCompatActivity() {
     }
 
     private fun BUSFravoriteInsert(busfavoriteEntity: TestFavoriteModel) {
-
-
         var businsertTask = (object : AsyncTask<Unit, Unit, Unit>() {
             override fun doInBackground(vararg params: Unit?) {
 
@@ -269,6 +285,50 @@ class DeepStationInfoActivity : AppCompatActivity() {
             }
 
         }).execute()
+    }
+
+    private fun busRoomFavroiteInsert() {
+        binding.countingstars.setOnClickListener {
+
+            val stationName = intent.getStringExtra("stationName").toString()
+            val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
+            val stationNodeNode = intent.getStringExtra("stationnodenode").toString()
+            val stationcitycode =
+                citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+
+            busRoomviewmodel.businsert(
+                citycode = stationcitycode,
+                stationnodenode = stationNodeNode,
+                stationName = stationName,
+                stationNodeNumber = stationNodeNumber
+            )
+
+
+
+        }
+
+
+    }
+
+    private fun busFavoriteChecking() {
+
+        busRoomviewmodel.busgetAll().observe(this, Observer { BusFavroiteEntity ->
+            Log.d(TAG, "무야호홓옹오오ㅗㅇ : $BusFavroiteEntity ")
+
+            val stationnameList = mutableListOf<String>()
+
+            for( i in BusFavroiteEntity.indices ){
+                val stationname = activitybusfavoriteEntity.get(i).stationName
+                stationnameList.add(stationname)
+            }
+
+            if (binding.BusStationName.text in stationnameList) {
+                binding.countingstars.setImageResource(R.drawable.shinigstar)
+            } else {
+                binding.countingstars.setImageResource(R.drawable.star)
+            }
+        })
+
     }
 
 

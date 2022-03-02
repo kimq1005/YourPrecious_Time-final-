@@ -22,6 +22,7 @@ import com.example.your_precioustime.SecondActivity.DB.SubwayDB.TestFavoriteMode
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
 import com.example.your_precioustime.databinding.ActivityBusStationInfoBinding
+import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
 import retrofit2.Call
 import retrofit2.Response
 
@@ -37,8 +38,11 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
     lateinit var activitybusfavoriteEntity: List<TestFavoriteModel>
 
-    private var retrofitInterface: Retrofit_InterFace = Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
+    private var retrofitInterface: Retrofit_InterFace =
+        Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
+
     private lateinit var busViewmodel: Bus_ViewModel
+    private lateinit var busRoomviewmodel: Bus_RoomViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +51,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
         busFavoriteDB = BusFavroiteDataBase.getinstance(App.instance)!!
         busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
+        busRoomviewmodel = ViewModelProvider(this, Bus_RoomViewModel.Factory(application)).get(Bus_RoomViewModel::class.java)
 
         binding.backbtn.setOnClickListener {
             onBackPressed()
@@ -72,8 +77,14 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
         SetFreshView()
         LiveDataSetBusStationRecyclerView()
-        busFavoriteGetAll()
-        savemystation()
+
+        busRoomFavroiteInsert()
+        busFavoriteChecking()
+
+
+
+//        busFavoriteGetAll()
+//        savemystation()
 
 
         Myobject.myobject.ToggleSet(
@@ -94,7 +105,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         }
     }
 
-    private fun LiveDataSetBusStationRecyclerView() = with(binding){
+    private fun LiveDataSetBusStationRecyclerView() = with(binding) {
         val stationName = intent.getStringExtra("stationName").toString()
         binding.BusInfoTitleTextView.text = stationName
         binding.titleviewTitleTextView.text = stationName
@@ -176,15 +187,15 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
                         busViewmodel.setStationInfoItem(ResultList)
 
 
-                        busViewmodel.stationinfoItem.observe(this@Bus_StationInfo_Activity, Observer {it->
-                            BusStationInfoRecyclerView.apply {
-                                adapter = busStationInfo_Adapater
-                                layoutManager = LinearLayoutManager(context)
-                                busStationInfo_Adapater.submitList(it)
-                            }
-                        })
-
-
+                        busViewmodel.stationinfoItem.observe(
+                            this@Bus_StationInfo_Activity,
+                            Observer { it ->
+                                BusStationInfoRecyclerView.apply {
+                                    adapter = busStationInfo_Adapater
+                                    layoutManager = LinearLayoutManager(context)
+                                    busStationInfo_Adapater.submitList(it)
+                                }
+                            })
 
 
                     }
@@ -368,6 +379,8 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         }).execute()
     }
 
+
+
     private fun savemystation() = with(binding) {
 
         favroiteaddImage.setOnClickListener {
@@ -375,7 +388,8 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
             val stationName = intent.getStringExtra("stationName").toString()
             val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
             val stationNodeNode = intent.getStringExtra("stationnodenode").toString()
-            val stationcitycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+            val stationcitycode =
+                citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
 
             val FavroiteModel = TestFavoriteModel(
                 id = null,
@@ -386,5 +400,52 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
             )
             BUSFravoriteInsert(FavroiteModel)
         }
+    }
+
+    private fun busRoomFavroiteInsert() {
+        binding.favroiteaddImage.setOnClickListener {
+
+            val stationName = intent.getStringExtra("stationName").toString()
+            val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
+            val stationNodeNode = intent.getStringExtra("stationnodenode").toString()
+            val stationcitycode =
+                citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+
+
+
+            busRoomviewmodel.businsert(
+                citycode = stationcitycode,
+                stationnodenode = stationNodeNode,
+                stationName = stationName,
+                stationNodeNumber = stationNodeNumber
+            )
+
+        }
+
+
+    }
+
+    private fun busFavoriteChecking() {
+
+        busRoomviewmodel.busgetAll().observe(this, Observer { BusFavroiteEntity ->
+            Log.d(Util.TAG, "무야호홓옹오오ㅗㅇ : $BusFavroiteEntity ")
+
+            val stationnameList = mutableListOf<String>()
+
+            for (i in BusFavroiteEntity.indices) {
+                val stationname = BusFavroiteEntity.get(i).stationName
+                stationnameList.add(stationname)
+            }
+
+            if (binding.BusInfoTitleTextView.text in stationnameList) {
+                binding.favroiteaddImage.setImageResource(R.drawable.fullstar)
+            } else {
+                binding.favroiteaddImage.setImageResource(R.drawable.whitestar)
+            }
+
+
+
+        })
+
     }
 }

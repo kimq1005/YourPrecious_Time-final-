@@ -26,6 +26,8 @@ class Bus_RoomViewModel(application: Application) : AndroidViewModel(application
         stationName: String,
         stationNodeNumber: String
     ) {
+
+
         val stationInfo = BusFavoriteEntity(
             null,
             citycode, stationnodenode, stationName, stationNodeNumber
@@ -47,6 +49,8 @@ class Bus_RoomViewModel(application: Application) : AndroidViewModel(application
             repository.busDelete(busFavoriteEntity)
         }
     }
+
+
 
 
 

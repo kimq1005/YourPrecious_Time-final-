@@ -26,4 +26,5 @@ class Subway_Repository(application: Application) {
     fun subwayDelete(subwayFavoriteEntity: SubwayFavoriteEntity){
         subwayFavoritedao.subwayDelete(subwayFavoriteEntity)
     }
+
 }
