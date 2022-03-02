@@ -20,6 +20,8 @@ import com.example.your_precioustime.SecondActivity.DB.SubwayNameEntity
 import com.example.your_precioustime.Url.Companion.SEOUL_SUBWAY_MAIN_URL
 import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.ActivitySubwayBinding
+import com.example.your_precioustime.roompackage.subway_room.SubwayFavoriteEntity
+import com.example.your_precioustime.roompackage.subway_room.Subway_FavoriteViewModel
 import retrofit2.Call
 import retrofit2.Response
 
@@ -39,6 +41,9 @@ class Subway_Activity : AppCompatActivity() {
     lateinit var subwayDataBase: SubwayDataBase
     lateinit var subwayNameListEntity: List<SubwayNameEntity>
 
+
+    private lateinit var subwayRoomViewModel: Subway_FavoriteViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         subwayBinding = ActivitySubwayBinding.inflate(layoutInflater)
@@ -46,6 +51,8 @@ class Subway_Activity : AppCompatActivity() {
 
         subwayDataBase = SubwayDataBase.getinstance(this)!!
         subwayViewModel = ViewModelProvider(this).get(SubwayViewModel::class.java)
+        subwayRoomViewModel = ViewModelProvider(this , Subway_FavoriteViewModel.Factory(application)).get(Subway_FavoriteViewModel::class.java)
+
 
         Myobject.myobject.ToggleSet(
             this,
@@ -55,10 +62,15 @@ class Subway_Activity : AppCompatActivity() {
             binding.BusfloatBtn
         )
 
+
+
         binding.backbtn.setOnClickListener {
             onBackPressed()
             finish()
         }
+
+
+
 
         binding.subwaySwipe.setOnRefreshListener {
             val searchtext = binding.SearchEditText.text.toString()
@@ -69,9 +81,8 @@ class Subway_Activity : AppCompatActivity() {
             binding.subwaySwipe.isRefreshing = false
         }
 
-
         binding.clickhere.setOnClickListener {
-            testgetAll()
+            subwayFavoriteChecking()
             val searchtext = binding.SearchEditText.text.toString()
             binding.subtitleTextView.text = searchtext
             binding.subwayfavroiteAddImageView.visibility = View.VISIBLE
@@ -97,6 +108,7 @@ class Subway_Activity : AppCompatActivity() {
 
 
 
+    //RecyclerViewSet
     private fun getsubwayCall(statNm: String) {
         subwayAdapter = SubwayAdapter()
 
@@ -231,7 +243,6 @@ class Subway_Activity : AppCompatActivity() {
 
     }
 
-
     private fun subwayinsert(subwayNameEntity: SubwayNameEntity) {
         val insertTask = (object : AsyncTask<Unit, Unit, Unit>() {
             override fun doInBackground(vararg params: Unit?) {
@@ -299,5 +310,39 @@ class Subway_Activity : AppCompatActivity() {
             }
 
         }).execute()
+    }
+
+    private fun subwayRoomFavroiteInsert(){
+        binding.subwayfavroiteAddImageView.setOnClickListener {
+            val subwayname = binding.subtitleTextView.text.toString()
+            subwayRoomViewModel.subwayInsert(subwayname)
+
+            Myobject.myobject.FavroiteSnackBar(binding.subwayActivity)
+        }
+    }
+
+    private fun subwayFavoriteChecking(){
+
+        subwayRoomViewModel.subwaygetAll().observe(this, Observer { SubwayFavoriteEntity->
+            val stationnameList = mutableListOf<String>()
+
+            for (i in SubwayFavoriteEntity.indices) {
+                val stationname = SubwayFavoriteEntity.get(i).subwayName
+                stationnameList.add(stationname)
+            }
+
+            if (binding.subtitleTextView.text in stationnameList) {
+                binding.subwayfavroiteAddImageView.setImageResource(R.drawable.shinigstar)
+
+                binding.subwayfavroiteAddImageView.setOnClickListener {
+                    Myobject.myobject.alreadyFavroiteSnackBar(binding.subwayActivity)
+                }
+            } else {
+                binding.subwayfavroiteAddImageView.setImageResource(R.drawable.star)
+                subwayRoomFavroiteInsert()
+            }
+
+
+        })
     }
 }

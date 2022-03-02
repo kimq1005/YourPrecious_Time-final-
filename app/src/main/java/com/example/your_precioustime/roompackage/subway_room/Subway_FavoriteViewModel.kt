@@ -9,13 +9,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class Subway_FavroiteViewModel(application: Application): AndroidViewModel(application) {
+class Subway_FavoriteViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository = Subway_Repository(application)
 
     class Factory(val application: Application) : ViewModelProvider.Factory{
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return Subway_FavroiteViewModel(application) as T
+            return Subway_FavoriteViewModel(application) as T
         }
 
     }
