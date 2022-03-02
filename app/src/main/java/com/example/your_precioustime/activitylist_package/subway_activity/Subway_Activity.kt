@@ -92,16 +92,16 @@ class Subway_Activity : AppCompatActivity() {
 
         }
 
-        binding.subwayfavroiteAddImageView.setOnClickListener {
-            val subwayname = binding.subtitleTextView.text.toString()
-
-            val mylist = SubwayNameEntity(
-                id = null,
-                subwayname
-            )
-
-            subwayinsert(mylist)
-        }
+//        binding.subwayfavroiteAddImageView.setOnClickListener {
+//            val subwayname = binding.subtitleTextView.text.toString()
+//
+//            val mylist = SubwayNameEntity(
+//                id = null,
+//                subwayname
+//            )
+//
+//            subwayinsert(mylist)
+//        }
 
 
     }
@@ -243,6 +243,43 @@ class Subway_Activity : AppCompatActivity() {
 
     }
 
+
+
+    private fun subwayRoomFavroiteInsert(){
+        binding.subwayfavroiteAddImageView.setOnClickListener {
+            val subwayname = binding.subtitleTextView.text.toString()
+            subwayRoomViewModel.subwayInsert(subwayname)
+
+            Myobject.myobject.FavroiteSnackBar(binding.subwayActivity)
+        }
+    }
+
+    private fun subwayFavoriteChecking(){
+
+        subwayRoomViewModel.subwaygetAll().observe(this, Observer { SubwayFavoriteEntity->
+            val stationnameList = mutableListOf<String>()
+
+            for (i in SubwayFavoriteEntity.indices) {
+                val stationname = SubwayFavoriteEntity.get(i).subwayName
+                stationnameList.add(stationname)
+            }
+
+            if (binding.subtitleTextView.text in stationnameList) {
+                binding.subwayfavroiteAddImageView.setImageResource(R.drawable.shinigstar)
+
+                binding.subwayfavroiteAddImageView.setOnClickListener {
+                    Myobject.myobject.alreadyFavroiteSnackBar(binding.subwayActivity)
+                }
+            } else {
+                binding.subwayfavroiteAddImageView.setImageResource(R.drawable.star)
+                subwayRoomFavroiteInsert()
+            }
+
+
+        })
+    }
+
+
     private fun subwayinsert(subwayNameEntity: SubwayNameEntity) {
         val insertTask = (object : AsyncTask<Unit, Unit, Unit>() {
             override fun doInBackground(vararg params: Unit?) {
@@ -310,39 +347,5 @@ class Subway_Activity : AppCompatActivity() {
             }
 
         }).execute()
-    }
-
-    private fun subwayRoomFavroiteInsert(){
-        binding.subwayfavroiteAddImageView.setOnClickListener {
-            val subwayname = binding.subtitleTextView.text.toString()
-            subwayRoomViewModel.subwayInsert(subwayname)
-
-            Myobject.myobject.FavroiteSnackBar(binding.subwayActivity)
-        }
-    }
-
-    private fun subwayFavoriteChecking(){
-
-        subwayRoomViewModel.subwaygetAll().observe(this, Observer { SubwayFavoriteEntity->
-            val stationnameList = mutableListOf<String>()
-
-            for (i in SubwayFavoriteEntity.indices) {
-                val stationname = SubwayFavoriteEntity.get(i).subwayName
-                stationnameList.add(stationname)
-            }
-
-            if (binding.subtitleTextView.text in stationnameList) {
-                binding.subwayfavroiteAddImageView.setImageResource(R.drawable.shinigstar)
-
-                binding.subwayfavroiteAddImageView.setOnClickListener {
-                    Myobject.myobject.alreadyFavroiteSnackBar(binding.subwayActivity)
-                }
-            } else {
-                binding.subwayfavroiteAddImageView.setImageResource(R.drawable.star)
-                subwayRoomFavroiteInsert()
-            }
-
-
-        })
     }
 }
