@@ -1,39 +1,33 @@
 package com.example.your_precioustime.activitylist_package.favorite_activity
 
 import android.annotation.SuppressLint
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.App
 import com.example.your_precioustime.DB.BusFavroiteDataBase
 import com.example.your_precioustime.ObjectManager.Myobject
-import com.example.your_precioustime.SecondActivity.DB.OnDeleteInterFace
-import com.example.your_precioustime.SecondActivity.DB.OnSubwayListDeleteInterFace
-import com.example.your_precioustime.SecondActivity.DB.SubwayDataBase
-import com.example.your_precioustime.SecondActivity.DB.SubwayNameEntity
+import com.example.your_precioustime.SecondActivity.DB.*
 import com.example.your_precioustime.SecondActivity.DB.SubwayDB.TestFavoriteModel
-import com.example.your_precioustime.Util
-import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.ActivityFavroiteBinding
+import com.example.your_precioustime.roompackage.bus_room.BusFavoriteEntity
+import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
+import com.example.your_precioustime.roompackage.subway_room.SubwayFavoriteEntity
+import com.example.your_precioustime.roompackage.subway_room.Subway_FavoriteViewModel
 
 @SuppressLint("StaticFieldLeak")
-class FavroiteActivity : AppCompatActivity(), OnDeleteInterFace, OnSubwayListDeleteInterFace {
+class FavroiteActivity : AppCompatActivity(), OnBusFavroiteListDeleteInterFace, OnSubwayFavoriteListDeleteInterFace {
 
     private var favroiteBinding: ActivityFavroiteBinding? = null
     private val binding get() = favroiteBinding!!
 
-    lateinit var busFavoriteDB: BusFavroiteDataBase
-    lateinit var busfavoriteEntity: List<TestFavoriteModel>
+    lateinit var busFavroiteadapter: Bus_FavroiteAdapter
+    lateinit var subwayfavoriteAdpater: Subway_FavoriteAdpater
 
-    lateinit var favroiteAdapterBus: BusFavorite_Adapter
-
-    lateinit var subwayDataBase: SubwayDataBase
-    lateinit var subwayNameEntity: List<SubwayNameEntity>
-    lateinit var subwayfavoriteAdpater: SubwayFavorite_Adpater
-
-    // 아래부터 추가 작업
+    private lateinit var busroomViewModel: Bus_RoomViewModel
+    private lateinit var subwayFavoriteviewmodel: Subway_FavoriteViewModel
 
 
 
@@ -42,14 +36,14 @@ class FavroiteActivity : AppCompatActivity(), OnDeleteInterFace, OnSubwayListDel
         favroiteBinding = ActivityFavroiteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        busFavoriteDB = BusFavroiteDataBase.getinstance(App.instance)!!
-        subwayDataBase = SubwayDataBase.getinstance(App.instance)!!
 
         binding.backwowbtn.setOnClickListener {
             onBackPressed()
             finish()
         }
 
+        busroomViewModel=ViewModelProvider(this , Bus_RoomViewModel.Factory(application)).get(Bus_RoomViewModel::class.java)
+        subwayFavoriteviewmodel = ViewModelProvider(this , Subway_FavoriteViewModel.Factory(application)).get(Subway_FavoriteViewModel::class.java)
 
         Myobject.myobject.ToggleSet(
             this,
@@ -59,116 +53,55 @@ class FavroiteActivity : AppCompatActivity(), OnDeleteInterFace, OnSubwayListDel
             binding.BusfloatBtn
         )
 
-//        getAll()
-//        subwaygetAll()
+        BusFavroiteRecyclerViewSet()
+        SubwayFavoriteRecyclerViewSet()
 
 
     }
 
+    private fun BusFavroiteRecyclerViewSet(){
+        busFavroiteadapter = Bus_FavroiteAdapter(this)
 
-    private fun busFavoriteListSetRecyclerView(){
-
-    }
-
-    private fun subwaygetAll() {
-        val getTask = (object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                subwayNameEntity = subwayDataBase.subwayNameDAO().subwayGetAll()
-                Log.d(TAG, "지하철 DB 확인 : $subwayNameEntity ")
+        busroomViewModel.busgetAll().observe(this, Observer { busfavoriteEntity->
+            binding.BusFavoriteRecyclerView.apply {
+                adapter = busFavroiteadapter
+                layoutManager = LinearLayoutManager(context)
+                busFavroiteadapter.submitlist(busfavoriteEntity)
             }
+        })
+    }
 
-            override fun onPostExecute(result: Unit?) {
-                super.onPostExecute(result)
-                subwaysetRecyclerView()
+    private fun SubwayFavoriteRecyclerViewSet(){
+        subwayfavoriteAdpater = Subway_FavoriteAdpater(this)
 
+        subwayFavoriteviewmodel.subwaygetAll().observe(this, Observer { subwayFavoriteEntity->
+            binding.SubwayFvRecylerView.apply{
+                adapter = subwayfavoriteAdpater
+                layoutManager = LinearLayoutManager(context)
+                subwayfavoriteAdpater.submitList(subwayFavoriteEntity)
             }
-        }).execute()
-    }
-
-    private fun subwaysetRecyclerView() = with(binding) {
-
-        subwayfavoriteAdpater = SubwayFavorite_Adpater(this@FavroiteActivity)
-
-        SubwayFvRecylerView.apply {
-            adapter = subwayfavoriteAdpater
-            layoutManager = LinearLayoutManager(context)
-            subwayfavoriteAdpater.submitList(subwayNameEntity)
-
-        }
-
+        })
 
     }
 
 
-    private fun getAll() {
-        val getAllTask = (@SuppressLint("StaticFieldLeak")
-        object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                busfavoriteEntity = busFavoriteDB.busFavoriteDAO().busFavoriteGetAll()
-            }
-
-            override fun onPostExecute(result: Unit?) {
-                super.onPostExecute(result)
-
-                Log.d(Util.TAG, "버스 태그 확인: $busfavoriteEntity")
-                setBusFavroiteRecyclerView()
-
-            }
-        }).execute()
-    }
-
-    private fun setBusFavroiteRecyclerView() = with(binding) {
-
-        favroiteAdapterBus = BusFavorite_Adapter(this@FavroiteActivity)
-
-        FavoriteRecyclerView.apply {
-            adapter = favroiteAdapterBus
-            layoutManager = LinearLayoutManager(context)
-            favroiteAdapterBus.submitList(busfavoriteEntity)
-
-        }
+    private fun busfavoriteDelete(busFavoriteEntity: BusFavoriteEntity){
+        busroomViewModel.busdelete(busFavoriteEntity)
 
     }
 
 
-    private fun onSubwayDelete(subwayNameEntity: SubwayNameEntity) {
-        val deleteTask = (object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                subwayDataBase.subwayNameDAO().subwayDelete(subwayNameEntity)
-            }
-
-
-            override fun onPostExecute(result: Unit?) {
-                super.onPostExecute(result)
-                subwaygetAll()
-            }
-
-        }).execute()
+    private fun subwayfavoriteDelete(subwayFavoriteEntity: SubwayFavoriteEntity){
+        subwayFavoriteviewmodel.subwayDelete(subwayFavoriteEntity)
     }
 
 
-    private fun ondeleteList(testFavoriteModel: TestFavoriteModel) {
-
-        val deleteTask = (
-                object : AsyncTask<Unit, Unit, Unit>() {
-                    override fun doInBackground(vararg params: Unit?) {
-                        busFavoriteDB.busFavoriteDAO().busFavoriteDelete(testFavoriteModel)
-                    }
-
-                    override fun onPostExecute(result: Unit?) {
-                        super.onPostExecute(result)
-                        getAll()
-                    }
-                }).execute()
+    override fun onDeleteBusFavoriteList(busFavoriteEntity: BusFavoriteEntity) {
+        busfavoriteDelete(busFavoriteEntity)
     }
 
-
-    override fun onDeleteFavroitelist(testFavoriteModel: TestFavoriteModel) {
-        ondeleteList(testFavoriteModel)
-    }
-
-    override fun onDeleteSubwayList(subwayNameEntity: SubwayNameEntity) {
-        onSubwayDelete(subwayNameEntity)
+    override fun onDeleteSubwayFavoriteList(subwayFavoriteEntity: SubwayFavoriteEntity) {
+        subwayfavoriteDelete(subwayFavoriteEntity)
     }
 
 

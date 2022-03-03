@@ -138,7 +138,7 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
                             FravroitestationinfoRecyclerView.apply {
                                 adapter = DFadapter
                                 layoutManager = LinearLayoutManager(context)
-                                DFadapter.submitList(ResultList)
+                                DFadapter.submitlist(ResultList)
                             }
 
                         }

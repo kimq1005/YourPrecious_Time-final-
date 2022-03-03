@@ -48,6 +48,7 @@ class Bus_RoomViewModel(application: Application) : AndroidViewModel(application
         CoroutineScope(Dispatchers.IO).launch{
             repository.busDelete(busFavoriteEntity)
         }
+
     }
 
 

@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.your_precioustime.mo_del.Item
 import com.example.your_precioustime.ObjectManager.citycodeCallObject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
+import com.example.your_precioustime.databinding.BusFavoritelistItemBinding
+import com.example.your_precioustime.databinding.BusfavoriteItemBinding
 import com.example.your_precioustime.databinding.BusitemLayoutBinding
 
 @SuppressLint("StaticFieldLeak")
-class Bus_DeepFavoriteAdapter : ListAdapter<Item, Bus_DeepFavoriteAdapter.myViewHolder>(diffUtil) {
+class Bus_DeepFavoriteAdapter : RecyclerView.Adapter<Bus_DeepFavoriteAdapter.myViewHolder>() {
 
-    inner class myViewHolder(var binding: BusitemLayoutBinding) :
+    lateinit var item : List<Item>
+
+    inner class myViewHolder(var binding: BusfavoriteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Item) {
@@ -36,30 +40,36 @@ class Bus_DeepFavoriteAdapter : ListAdapter<Item, Bus_DeepFavoriteAdapter.myView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
-        val view = BusitemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view = BusfavoriteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
         return myViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
-        holder.bind(currentList[position])
-
+        holder.bind(item[position])
     }
 
-
-    companion object {
-
-        val diffUtil = object : DiffUtil.ItemCallback<Item>() {
-            override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-                return oldItem == newItem
-
-            }
-        }
-
+    override fun getItemCount(): Int {
+       return item.size
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun submitlist(list: List<Item>){
+        item = list
+        notifyDataSetChanged()
+    }
+//
+//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
+//        val view = BusfavoriteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//        return myViewHolder(view)
+//    }
+//
+//    override fun onBindViewHolder(holder: myViewHolder, position: Int) {
+//        holder.bind(currentList[position])
+//
+//    }
+
+
 
 
 }

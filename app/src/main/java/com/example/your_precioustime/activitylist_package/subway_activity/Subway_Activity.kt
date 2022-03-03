@@ -51,7 +51,10 @@ class Subway_Activity : AppCompatActivity() {
 
         subwayDataBase = SubwayDataBase.getinstance(this)!!
         subwayViewModel = ViewModelProvider(this).get(SubwayViewModel::class.java)
-        subwayRoomViewModel = ViewModelProvider(this , Subway_FavoriteViewModel.Factory(application)).get(Subway_FavoriteViewModel::class.java)
+        subwayRoomViewModel =
+            ViewModelProvider(this, Subway_FavoriteViewModel.Factory(application)).get(
+                Subway_FavoriteViewModel::class.java
+            )
 
 
         Myobject.myobject.ToggleSet(
@@ -92,20 +95,8 @@ class Subway_Activity : AppCompatActivity() {
 
         }
 
-//        binding.subwayfavroiteAddImageView.setOnClickListener {
-//            val subwayname = binding.subtitleTextView.text.toString()
-//
-//            val mylist = SubwayNameEntity(
-//                id = null,
-//                subwayname
-//            )
-//
-//            subwayinsert(mylist)
-//        }
-
 
     }
-
 
 
     //RecyclerViewSet
@@ -221,7 +212,7 @@ class Subway_Activity : AppCompatActivity() {
 
                     //LiveData, ViewModel
                     subwayViewModel.setSubwayItem(subwaymodel)
-                    subwayViewModel.subwayItem.observe(this@Subway_Activity, Observer { it->
+                    subwayViewModel.subwayItem.observe(this@Subway_Activity, Observer { it ->
                         binding.subwayRecyclerView.apply {
                             adapter = subwayAdapter
                             layoutManager = LinearLayoutManager(context)
@@ -244,8 +235,7 @@ class Subway_Activity : AppCompatActivity() {
     }
 
 
-
-    private fun subwayRoomFavroiteInsert(){
+    private fun subwayRoomFavroiteInsert() {
         binding.subwayfavroiteAddImageView.setOnClickListener {
             val subwayname = binding.subtitleTextView.text.toString()
             subwayRoomViewModel.subwayInsert(subwayname)
@@ -254,9 +244,9 @@ class Subway_Activity : AppCompatActivity() {
         }
     }
 
-    private fun subwayFavoriteChecking(){
+    private fun subwayFavoriteChecking() {
 
-        subwayRoomViewModel.subwaygetAll().observe(this, Observer { SubwayFavoriteEntity->
+        subwayRoomViewModel.subwaygetAll().observe(this, Observer { SubwayFavoriteEntity ->
             val stationnameList = mutableListOf<String>()
 
             for (i in SubwayFavoriteEntity.indices) {
@@ -280,72 +270,5 @@ class Subway_Activity : AppCompatActivity() {
     }
 
 
-    private fun subwayinsert(subwayNameEntity: SubwayNameEntity) {
-        val insertTask = (object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                subwayNameListEntity = subwayDataBase.subwayNameDAO().subwayGetAll()
 
-                Log.d(TAG, "지하철이름저장 로그: $subwayNameListEntity")
-
-                val subwaynameList = mutableListOf<String>()
-                for (i in subwayNameListEntity.indices) {
-                    val subwayname = subwayNameListEntity.get(i).subwayName
-                    subwaynameList.add(subwayname)
-                }
-
-                if (binding.subtitleTextView.text !in subwaynameList) {
-                    subwayDataBase.subwayNameDAO().subwayInsert(subwayNameEntity)
-                }
-
-            }
-
-            override fun onPostExecute(result: Unit?) {
-                super.onPostExecute(result)
-
-                val stationnameList = mutableListOf<String>()
-
-                for (i in subwayNameListEntity.indices) {
-                    val stationname = subwayNameListEntity.get(i).subwayName
-                    stationnameList.add(stationname)
-                }
-
-                if (binding.subtitleTextView.text in stationnameList) {
-                    Myobject.myobject.alreadyFavroiteSnackBar(binding.subwayActivity)
-                } else {
-                    Myobject.myobject.FavroiteSnackBar(binding.subwayActivity)
-                    binding.subwayfavroiteAddImageView.setImageResource(R.drawable.shinigstar)
-                }
-
-
-            }
-
-        }).execute()
-    }
-
-    private fun testgetAll() {
-        val getAllTask = (object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                subwayNameListEntity = subwayDataBase.subwayNameDAO().subwayGetAll()
-                Log.d(TAG, "지하철이름저장 로그: $subwayNameListEntity")
-            }
-
-            override fun onPostExecute(result: Unit?) {
-                super.onPostExecute(result)
-                val stationnameList = mutableListOf<String>()
-
-                for (i in subwayNameListEntity.indices) {
-                    val stationname = subwayNameListEntity.get(i).subwayName
-                    stationnameList.add(stationname)
-                }
-
-                if (binding.subtitleTextView.text in stationnameList) {
-                    binding.subwayfavroiteAddImageView.setImageResource(R.drawable.shinigstar)
-                } else {
-                    binding.subwayfavroiteAddImageView.setImageResource(R.drawable.star)
-                }
-
-            }
-
-        }).execute()
-    }
 }
