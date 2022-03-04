@@ -37,7 +37,7 @@ class Bus_Station_Search_Adapter : RecyclerView.Adapter<Bus_Station_Search_Adapt
         val stationNodeNumber = stationItem?.get(position)?.nodeid.toString()
 
         holder.itemView.setOnClickListener {
-//            val intent = Intent(holder.itemView.context, MapsActivity::class.java)
+
             val intent = Intent(holder.itemView.context, Bus_StationInfo_Activity::class.java)
             intent.putExtra("stationName", stationName)
             intent.putExtra("stationnodenode", stationnodenode)

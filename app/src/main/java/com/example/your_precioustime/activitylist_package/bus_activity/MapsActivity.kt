@@ -37,8 +37,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var busStationInfo_Adapater: BusStationInfo_Adpater
-    lateinit var busFavoriteDB: BusFavroiteDataBase
-    lateinit var activitybusfavoriteEntity: List<TestFavoriteModel>
 
 
     private var retrofitInterface: Retrofit_InterFace =
@@ -48,8 +46,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        busFavoriteDB = BusFavroiteDataBase.getinstance(App.instance)!!
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -63,8 +59,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         setMap()
         SetBusStationRecyclerView()
-        busFavoriteGetAll()
-        savemystation()
         SetmapView()
         BusrefreshView()
 
@@ -226,8 +220,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         })
 
 
-
-
                     }
 
                 }
@@ -241,91 +233,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
 
-    }
-
-    private fun BUSFravoriteInsert(busfavoriteEntity: TestFavoriteModel) {
-        var businsertTask = (object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-
-                activitybusfavoriteEntity = busFavoriteDB.busFavoriteDAO().busFavoriteGetAll()
-
-                val stationnameList = mutableListOf<String>()
-                for (i in activitybusfavoriteEntity.indices) {
-                    val stationname = activitybusfavoriteEntity.get(i).stationName
-                    stationnameList.add(stationname)
-                }
-                if (binding.BusStationName.text !in stationnameList) {
-                    busFavoriteDB.busFavoriteDAO().busFavoriteInsert(busfavoriteEntity)
-                }
-
-            }
-
-            override fun onPostExecute(result: Unit?) {
-                super.onPostExecute(result)
-                val stationnameList = mutableListOf<String>()
-
-                for (i in activitybusfavoriteEntity.indices) {
-                    val stationname = activitybusfavoriteEntity.get(i).stationName
-                    stationnameList.add(stationname)
-                }
-
-                if (binding.BusStationName.text in stationnameList) {
-
-                    Myobject.myobject.alreadyFavroiteSnackBar(binding.MapsActivity)
-
-                } else {
-                    Myobject.myobject.FavroiteSnackBar(binding.MapsActivity)
-                    binding.countingstars.setImageResource(R.drawable.shinigstar)
-                }
-
-            }
-        }).execute()
-    }
-
-    private fun busFavoriteGetAll() {
-        val busGetAllTask = (object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                activitybusfavoriteEntity = busFavoriteDB.busFavoriteDAO().busFavoriteGetAll()
-            }
-
-            override fun onPostExecute(result: Unit?) {
-                super.onPostExecute(result)
-                val stationnameList = mutableListOf<String>()
-
-                for (i in activitybusfavoriteEntity.indices) {
-                    val stationname = activitybusfavoriteEntity.get(i).stationName
-                    stationnameList.add(stationname)
-                }
-
-                if (binding.BusStationName.text in stationnameList) {
-                    binding.countingstars.setImageResource(R.drawable.shinigstar)
-                } else {
-                    binding.countingstars.setImageResource(R.drawable.star)
-                }
-
-            }
-
-        }).execute()
-    }
-
-    private fun savemystation() = with(binding) {
-
-        countingstars.setOnClickListener {
-
-            val stationName = intent.getStringExtra("stationName").toString()
-            val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
-            val stationNodeNode = intent.getStringExtra("stationnodenode").toString()
-            val stationcitycode =
-                citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-            val hello = TestFavoriteModel(
-                id = null,
-                citycode = stationcitycode,
-                stationnodenode = stationNodeNode,
-                stationName = stationName,
-                stationNodeNumber = stationNodeNumber
-            )
-            BUSFravoriteInsert(hello)
-        }
     }
 
 

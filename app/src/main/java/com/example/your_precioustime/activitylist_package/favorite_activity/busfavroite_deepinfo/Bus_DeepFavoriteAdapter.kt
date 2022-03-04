@@ -22,19 +22,11 @@ class Bus_DeepFavoriteAdapter : RecyclerView.Adapter<Bus_DeepFavoriteAdapter.myV
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Item) {
-            val mytime = item.arrtime!!
-            val second = mytime / 60
-            val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode(
-                "favroitebuscitycode",
-                "favroitebuscitycode"
-            )
+            val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
             val cityname = citycodeCallObject.citycodeCallObject.returncitynamecode(citycode)
-
-
-            binding.BusNumber.text = item.routeno
-            binding.waitBusNumber.text = item.arrprevstationcnt.toString()
-            binding.waitTime.text = second.toString()
             binding.BusCityname.text = cityname
+
+            binding.item = item
 
         }
     }
@@ -58,18 +50,6 @@ class Bus_DeepFavoriteAdapter : RecyclerView.Adapter<Bus_DeepFavoriteAdapter.myV
         item = list
         notifyDataSetChanged()
     }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
-//        val view = BusfavoriteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        return myViewHolder(view)
-//    }
-//
-//    override fun onBindViewHolder(holder: myViewHolder, position: Int) {
-//        holder.bind(currentList[position])
-//
-//    }
-
-
 
 
 }

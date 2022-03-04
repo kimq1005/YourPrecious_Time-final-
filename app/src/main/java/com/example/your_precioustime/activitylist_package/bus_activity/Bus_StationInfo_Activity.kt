@@ -34,9 +34,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
 
     private lateinit var busStationInfo_Adapater: BusStationInfo_Adpater
-    lateinit var busFavoriteDB: BusFavroiteDataBase
 
-    lateinit var activitybusfavoriteEntity: List<TestFavoriteModel>
 
     private var retrofitInterface: Retrofit_InterFace =
         Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
@@ -49,7 +47,6 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         busStationinfoBinding = ActivityBusStationInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        busFavoriteDB = BusFavroiteDataBase.getinstance(App.instance)!!
         busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
         busRoomviewmodel = ViewModelProvider(
             this,
@@ -73,19 +70,11 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.sharecardView.setOnClickListener {
-            //
-        }
-
 
         SetFreshView()
         LiveDataSetBusStationRecyclerView()
-//        busRoomFavroiteInsert()
         busFavoriteChecking()
 
-
-//        busFavoriteGetAll()
-//        savemystation()
 
 
         Myobject.myobject.ToggleSet(

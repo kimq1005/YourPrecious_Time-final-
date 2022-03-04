@@ -68,8 +68,8 @@
         <entry key="app/src/main/res/layout/activity_test_maps2.xml" value="0.2328125" />
         <entry key="app/src/main/res/layout/bus_favoritelist_item.xml" value="0.14221014492753623" />
         <entry key="app/src/main/res/layout/bus_fragment.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/bus_station_searchitem_layout.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/busfavorite_item.xml" value="0.18795289855072464" />
+        <entry key="app/src/main/res/layout/bus_station_searchitem_layout.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/busfavorite_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/busfavroite_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/busfragment.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/busitem_layout.xml" value="0.1" />

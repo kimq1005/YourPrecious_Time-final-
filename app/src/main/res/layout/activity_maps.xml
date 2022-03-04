@@ -62,15 +62,6 @@
             app:layout_constraintTop_toTopOf="@id/motionConstarintlayout">
 
 
-            <ImageView
-                android:id="@+id/countingstars"
-                android:layout_width="17dp"
-                android:layout_height="17dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/star"
-                app:layout_constraintBottom_toTopOf="@+id/downunderline"
-                app:layout_constraintEnd_toStartOf="@+id/BusStationName" />
-
             <TextView
                 android:id="@+id/BusStationName"
                 android:layout_width="wrap_content"

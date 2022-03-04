@@ -1,7 +1,9 @@
 package com.example.your_precioustime.Retrofit
 
 import android.util.Log
+import android.view.View
 import com.example.your_precioustime.Model.SubwayModel.SubwayModel
+import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.mo_del.SubwayItem
@@ -18,7 +20,7 @@ class Retrofit_Manager {
         .create(Retrofit_InterFace::class.java)
 
 
-    fun getsubwayCall(statNm: String, mymodel: (MutableList<SubwayItem>) -> Unit) {
+    fun getsubwayCall(statNm: String, snackview:View?,subtitle:View?,favoriteimage:View? ,mymodel: (MutableList<SubwayItem>) -> Unit) {
 
         val call = retrofitInterface.SUBWAYGET(
             statnNm = statNm
@@ -31,21 +33,30 @@ class Retrofit_Manager {
                 //이력서 너무 어려워요 ㅠㅠㅠㅠ
 
                 body?.let {
-                    val hello = body.realtimeArrivalList!!
+                    val hello = body.realtimeArrivalList
 
-                    for (i in hello.indices) {
+                    if(hello !=null){
+                        for (i in hello.indices) {
 
-                        val firstsubwayId = hello.get(i).subwayId!!
-                        val trainLineNm = hello.get(i).trainLineNm
-                        val bstatnNm = hello.get(i).bstatnNm
-                        val arvlMsg2 = hello.get(i).arvlMsg2
+                            val firstsubwayId = hello.get(i).subwayId!!
+                            val trainLineNm = hello.get(i).trainLineNm
+                            val bstatnNm = hello.get(i).bstatnNm
+                            val arvlMsg2 = hello.get(i).arvlMsg2
 
+                            subwaymodel.add(
+                                SubwayItem(firstsubwayId, trainLineNm, bstatnNm, arvlMsg2)
+                            )
 
-                        subwaymodel.add(
-                            SubwayItem(firstsubwayId, trainLineNm, bstatnNm, arvlMsg2)
-                        )
+                        }
 
+                    }else{
+                        if (snackview != null) {
+                            Myobject.myobject.retrystation(snackview)
+                            subtitle?.visibility = View.INVISIBLE
+                            favoriteimage?.visibility = View.INVISIBLE
+                        }
                     }
+
 
                     Log.d(TAG, "onResponse: $subwaymodel")
 

@@ -24,9 +24,11 @@ class Bus_Activity : AppCompatActivity() {
     private val binding get() = busBinding!!
 
     lateinit var busStationSearchAdapter: Bus_Station_Search_Adapter
-    private var retrofitInterface: Retrofit_InterFace = Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
+    private var retrofitInterface: Retrofit_InterFace =
+        Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
 
     private lateinit var bus_ViewModel: Bus_ViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         busBinding = ActivityBusBinding.inflate(layoutInflater)
@@ -38,8 +40,7 @@ class Bus_Activity : AppCompatActivity() {
         }
 
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-//        SetRecyclerView(citycode, null)
-        setLiveDataRecyclerView(citycode,null)
+        setLiveDataRecyclerView(citycode, null)
         bus_ViewModel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
 
 
@@ -58,7 +59,7 @@ class Bus_Activity : AppCompatActivity() {
 
 
     //LiveData, ViewModel 사용한 RecyclerView
-    private fun setLiveDataRecyclerView(citycode: String , stationName: String?) = with(binding){
+    private fun setLiveDataRecyclerView(citycode: String, stationName: String?) = with(binding) {
 
 
         val stationcalls = retrofitInterface.StationNameGet(
@@ -108,40 +109,5 @@ class Bus_Activity : AppCompatActivity() {
 
     }
 
-
-
-    fun SetRecyclerView(citycode: String, stationName: String?) = with(binding) {
-
-        val stationcalls = retrofitInterface.StationNameGet(
-            cityCode = citycode,
-            staionName = stationName,
-            null
-        )
-
-        stationcalls.enqueue(object : retrofit2.Callback<StationBus> {
-
-            override fun onResponse(call: Call<StationBus>, response: Response<StationBus>) {
-                val body = response.body()
-                busStationSearchAdapter = Bus_Station_Search_Adapter()
-
-                body?.let { it ->
-                    val hello = body.body.items.item
-                    busRecyclerView.apply {
-                        adapter = busStationSearchAdapter
-                        layoutManager = LinearLayoutManager(context)
-                        busStationSearchAdapter.submitList(hello)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<StationBus>, t: Throwable) {
-                Log.d(Util.TAG, "onFailure:$t")
-
-            }
-
-        })
-
-
-    }
 
 }

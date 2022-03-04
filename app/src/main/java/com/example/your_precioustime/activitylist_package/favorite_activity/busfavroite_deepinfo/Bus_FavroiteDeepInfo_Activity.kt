@@ -3,6 +3,8 @@ package com.example.your_precioustime.activitylist_package.favorite_activity.bus
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.mo_del.Bus
 import com.example.your_precioustime.mo_del.Item
@@ -11,7 +13,10 @@ import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
+import com.example.your_precioustime.Util.Companion.TAG
+import com.example.your_precioustime.activitylist_package.bus_activity.Bus_ViewModel
 import com.example.your_precioustime.databinding.ActivityBusFavroiteDeepInfoBinding
+import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
 import retrofit2.Call
 import retrofit2.Response
 
@@ -27,10 +32,14 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
         )
     lateinit var DFadapter: Bus_DeepFavoriteAdapter
 
+    private lateinit var busViewmodel: Bus_ViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         busFavroiteDeepInfoBinding = ActivityBusFavroiteDeepInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
 
 
         setApiRecyclerView()
@@ -135,11 +144,18 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
 
                             DFadapter = Bus_DeepFavoriteAdapter()
 
-                            FravroitestationinfoRecyclerView.apply {
-                                adapter = DFadapter
-                                layoutManager = LinearLayoutManager(context)
-                                DFadapter.submitlist(ResultList)
-                            }
+                            busViewmodel.setStationInfoItem(ResultList)
+
+                            busViewmodel.stationinfoItem.observe(
+                                this@Bus_FavroiteDeepInfo_Activity,
+                                Observer {
+                                    FravroitestationinfoRecyclerView.apply {
+                                        adapter = DFadapter
+                                        layoutManager = LinearLayoutManager(context)
+                                        DFadapter.submitlist(it)
+                                    }
+                                })
+
 
                         }
                     }
