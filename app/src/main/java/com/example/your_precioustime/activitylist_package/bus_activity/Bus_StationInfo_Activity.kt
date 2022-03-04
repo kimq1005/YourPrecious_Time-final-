@@ -117,11 +117,11 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
             busViewmodel.stationinfoItem.observe(
                 this@Bus_StationInfo_Activity,
-                Observer {  busitem->
+                Observer {  setbusitem->
                     binding.BusStationInfoRecyclerView.apply {
                         adapter = busStationInfo_Adapater
                         layoutManager = LinearLayoutManager(context)
-                        busStationInfo_Adapater.submitList(busitem)
+                        busStationInfo_Adapater.submitList(setbusitem)
                     }
                 })
         })
@@ -158,7 +158,6 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
     private fun busFavoriteChecking() {
 
         busRoomviewmodel.busgetAll().observe(this, Observer { BusFavroiteEntity ->
-            Log.d(Util.TAG, "무야호홓옹오오ㅗㅇ : $BusFavroiteEntity ")
 
             val stationnameList = mutableListOf<String>()
 

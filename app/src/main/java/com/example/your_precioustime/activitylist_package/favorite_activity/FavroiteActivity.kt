@@ -59,6 +59,7 @@ class FavroiteActivity : AppCompatActivity(), OnBusFavroiteListDeleteInterFace, 
 
     }
 
+    //ViewModel , LiveData 도입 및 RecyclerView Set
     private fun BusFavroiteRecyclerViewSet(){
         busFavroiteadapter = Bus_FavroiteAdapter(this)
 
@@ -71,6 +72,8 @@ class FavroiteActivity : AppCompatActivity(), OnBusFavroiteListDeleteInterFace, 
         })
     }
 
+
+    //ViewModel , LiveData 도입 및 RecyclerView Set
     private fun SubwayFavoriteRecyclerViewSet(){
         subwayfavoriteAdpater = Subway_FavoriteAdpater(this)
 
