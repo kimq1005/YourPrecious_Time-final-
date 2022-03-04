@@ -11,6 +11,7 @@ import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
+import com.example.your_precioustime.Retrofit.Retrofit_Manager
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
 import com.example.your_precioustime.Util.Companion.TAG
@@ -24,8 +25,7 @@ class Bus_Activity : AppCompatActivity() {
     private val binding get() = busBinding!!
 
     lateinit var busStationSearchAdapter: Bus_Station_Search_Adapter
-    private var retrofitInterface: Retrofit_InterFace =
-        Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
+
 
     private lateinit var bus_ViewModel: Bus_ViewModel
 
@@ -54,51 +54,31 @@ class Bus_Activity : AppCompatActivity() {
         )
 
         ClickSearchBtn()
-        //MVVMGOGO
+
     }
 
+    //버스 정류장명(이름) 가져오기 함수 및 LiveData, ViewModel 사용한 RecyclerView Set
+    private fun setLiveDataRecyclerView(citycode: String, stationName: String?){
+        Retrofit_Manager.retrofitManager.getbusCall(citycode,stationName,
+        mymodel = {stationitem->
+            busStationSearchAdapter = Bus_Station_Search_Adapter()
 
-    //LiveData, ViewModel 사용한 RecyclerView
-    private fun setLiveDataRecyclerView(citycode: String, stationName: String?) = with(binding) {
+            bus_ViewModel.setStationBusItem(stationitem)
 
-
-        val stationcalls = retrofitInterface.StationNameGet(
-            cityCode = citycode,
-            staionName = stationName,
-            null
-        )
-
-        stationcalls.enqueue(object : retrofit2.Callback<StationBus> {
-            override fun onResponse(call: Call<StationBus>, response: Response<StationBus>) {
-                val body = response.body()
-
-                busStationSearchAdapter = Bus_Station_Search_Adapter()
-
-                body?.let { it ->
-                    val hello = body.body.items.item
-
-                    bus_ViewModel.setStationBusItem(hello)
-
-                    bus_ViewModel.stationItem.observe(
-                        this@Bus_Activity, Observer {
-                            busRecyclerView.apply {
-                                adapter = busStationSearchAdapter
-                                layoutManager = LinearLayoutManager(context)
-                                busStationSearchAdapter.submitList(it)
-                            }
-                        }
-                    )
-
-
+            bus_ViewModel.stationItem.observe(
+                this@Bus_Activity, Observer {
+                    binding.busRecyclerView.apply {
+                        adapter = busStationSearchAdapter
+                        layoutManager = LinearLayoutManager(context)
+                        busStationSearchAdapter.submitList(it)
+                    }
                 }
-            }
-
-            override fun onFailure(call: Call<StationBus>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
-            }
+            )
 
         })
     }
+
+
 
     private fun ClickSearchBtn() = with(binding) {
         clickhere.setOnClickListener {

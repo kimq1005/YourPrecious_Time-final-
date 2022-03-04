@@ -50,7 +50,6 @@ class Subway_Activity : AppCompatActivity() {
                 Subway_FavoriteViewModel::class.java
             )
 
-
         Myobject.myobject.ToggleSet(
             this,
             binding.floatingBtn,
@@ -130,6 +129,8 @@ class Subway_Activity : AppCompatActivity() {
         }
     }
 
+
+    //즐겨찾기 확인
     private fun subwayFavoriteChecking() {
 
         subwayRoomViewModel.subwaygetAll().observe(this, Observer { SubwayFavoriteEntity ->

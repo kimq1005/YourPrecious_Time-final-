@@ -1,12 +1,22 @@
 package com.example.your_precioustime.Retrofit
 
+import android.content.Context
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.your_precioustime.App
 import com.example.your_precioustime.Model.SubwayModel.SubwayModel
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.Url
+import com.example.your_precioustime.Util
 import com.example.your_precioustime.Util.Companion.TAG
-import com.example.your_precioustime.mo_del.SubwayItem
+import com.example.your_precioustime.activitylist_package.bus_activity.BusStationInfo_Adpater
+import com.example.your_precioustime.activitylist_package.bus_activity.Bus_Station_Search_Adapter
+import com.example.your_precioustime.activitylist_package.bus_activity.Bus_ViewModel
+import com.example.your_precioustime.mo_del.*
 import retrofit2.Call
 import retrofit2.Response
 
@@ -16,13 +26,145 @@ class Retrofit_Manager {
         val retrofitManager = Retrofit_Manager()
     }
 
-    private var retrofitInterface = Retrofit_Client.getJsonClienet(Url.SEOUL_SUBWAY_MAIN_URL)
+
+    //지하철 API
+    private var subwayretrofitInterface = Retrofit_Client.getJsonClienet(Url.SEOUL_SUBWAY_MAIN_URL)
         .create(Retrofit_InterFace::class.java)
 
 
+    //버스 정류장 API
+    private var busretrofitInterface: Retrofit_InterFace =
+        Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
+
+
+    //버스 정류장명(이름) 가져오기 함수
+    fun getbusCall(citycode:String, stationName:String?, mymodel: (List<StationItem>) -> Unit){
+
+
+        val stationcalls = busretrofitInterface.StationNameGet(
+            cityCode = citycode,
+            staionName = stationName,
+            null
+        )
+        stationcalls.enqueue(object : retrofit2.Callback<StationBus> {
+            override fun onResponse(call: Call<StationBus>, response: Response<StationBus>) {
+                val body = response.body()
+
+
+                body?.let { it ->
+                    val stationitem = body.body.items.item
+                    mymodel(stationitem)
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<StationBus>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
+
+
+    //버스 정류장명(이름)에 대한 정보 가져오기 함수
+    fun getbusStationInfoCall(citycode: String , stationNodeNumber:String,mymodel: (List<Item>) -> Unit ){
+
+        val call = busretrofitInterface.BusGet(citycode, stationNodeNumber)
+
+        call.enqueue(object : retrofit2.Callback<Bus> {
+            override fun onResponse(call: Call<Bus>, response: Response<Bus>) {
+
+                val body = response.body()
+
+                body?.let {
+                    val itemList = body.body.items.item
+                    val hi = mutableListOf<Item>()
+
+                    for (i in itemList.indices) {
+                        val busNm: String
+                        val waitbus: Int
+                        val waittime: Int
+
+                        busNm = itemList.get(i).routeno!!
+                        waitbus = itemList.get(i).arrprevstationcnt!!
+                        waittime = itemList.get(i).arrtime!!
+
+                        hi.add(
+                            Item(
+                                busNm, waitbus, waittime
+                            )
+                        )
+
+                    }
+                    Log.d(TAG, "\n 전체값 리스트 : $hi \n")
+
+
+                    val firstList = hi.filterIndexed { index, i ->
+
+                        index % 2 == 0
+                    }
+
+
+                    val secondList = hi.filterIndexed { index, item ->
+                        index % 2 == 1
+                    }
+
+
+                    val ResultList = mutableListOf<Item>()
+
+
+                    firstList.forEach {
+                        val ARouteNo = it.routeno
+                        val AWaitstation = it.arrprevstationcnt
+                        val AWaitTime = it.arrtime
+
+
+                        secondList.forEach {
+                            val BRouteNo = it.routeno
+                            val BWaitstation = it.arrprevstationcnt
+
+                            if (ARouteNo == BRouteNo) {
+                                if (AWaitstation!! > BWaitstation!!) {
+                                    ResultList.add(
+                                        Item(
+                                            it.routeno,
+                                            it.arrprevstationcnt,
+                                            it.arrtime
+                                        )
+                                    )
+
+                                } else {
+                                    ResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
+                                }
+                            }
+
+                        }
+
+                        mymodel(ResultList)
+
+
+
+                    }
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<Bus>, t: Throwable) {
+                Log.d(Util.TAG, "오류: $t")
+            }
+
+        })
+    }
+
+
+
+
+    //지하철역 정보 가져오기 함수
     fun getsubwayCall(statNm: String, snackview:View?,subtitle:View?,favoriteimage:View? ,mymodel: (MutableList<SubwayItem>) -> Unit) {
 
-        val call = retrofitInterface.SUBWAYGET(
+        val call = subwayretrofitInterface.SUBWAYGET(
             statnNm = statNm
         )
 
@@ -30,18 +172,17 @@ class Retrofit_Manager {
             override fun onResponse(call: Call<SubwayModel>, response: Response<SubwayModel>) {
                 val body = response.body()
                 val subwaymodel = mutableListOf<SubwayItem>()
-                //이력서 너무 어려워요 ㅠㅠㅠㅠ
 
                 body?.let {
-                    val hello = body.realtimeArrivalList
+                    val subwaycalllist = body.realtimeArrivalList
 
-                    if(hello !=null){
-                        for (i in hello.indices) {
+                    if(subwaycalllist !=null){
+                        for (i in subwaycalllist.indices) {
 
-                            val firstsubwayId = hello.get(i).subwayId!!
-                            val trainLineNm = hello.get(i).trainLineNm
-                            val bstatnNm = hello.get(i).bstatnNm
-                            val arvlMsg2 = hello.get(i).arvlMsg2
+                            val firstsubwayId = subwaycalllist.get(i).subwayId!!
+                            val trainLineNm = subwaycalllist.get(i).trainLineNm
+                            val bstatnNm = subwaycalllist.get(i).bstatnNm
+                            val arvlMsg2 = subwaycalllist.get(i).arvlMsg2
 
                             subwaymodel.add(
                                 SubwayItem(firstsubwayId, trainLineNm, bstatnNm, arvlMsg2)

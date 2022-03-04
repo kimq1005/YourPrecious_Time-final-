@@ -18,6 +18,7 @@ import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.R
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
+import com.example.your_precioustime.Retrofit.Retrofit_Manager
 import com.example.your_precioustime.SecondActivity.DB.SubwayDB.TestFavoriteModel
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
@@ -72,6 +73,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
 
         SetFreshView()
+
         LiveDataSetBusStationRecyclerView()
         busFavoriteChecking()
 
@@ -88,6 +90,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
     }
 
+    //새로고침
     private fun SetFreshView() {
         binding.BusInfoStationSwipeLayout.setOnRefreshListener {
             LiveDataSetBusStationRecyclerView()
@@ -95,111 +98,35 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         }
     }
 
-    private fun LiveDataSetBusStationRecyclerView() = with(binding) {
+    //버스 정류장명(이름)에 대한 정보 가져오기 함수 불러오기 및 Recyclerview Set
+    private fun LiveDataSetBusStationRecyclerView() {
         val stationName = intent.getStringExtra("stationName").toString()
         binding.BusInfoTitleTextView.text = stationName
         binding.titleviewTitleTextView.text = stationName
-
-        val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+        val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
 
-        val call = retrofitInterface.BusGet(citycode, stationNodeNumber)
-        call.enqueue(object : retrofit2.Callback<Bus> {
-            override fun onResponse(call: Call<Bus>, response: Response<Bus>) {
-                busStationInfo_Adapater = BusStationInfo_Adpater()
 
-                val body = response.body()
+        Retrofit_Manager.retrofitManager.getbusStationInfoCall(citycode,stationNodeNumber,
+        mymodel = { busitem->
+            busStationInfo_Adapater = BusStationInfo_Adpater()
 
-                body?.let {
-                    val itemList = body.body.items.item
-                    val hi = mutableListOf<Item>()
-                    for (i in itemList.indices) {
-                        val busNm: String
-                        val waitbus: Int
-                        val waittime: Int
+            //viewmodelCall
+            busViewmodel.setStationInfoItem(busitem)
 
-                        busNm = itemList.get(i).routeno!!
-                        waitbus = itemList.get(i).arrprevstationcnt!!
-                        waittime = itemList.get(i).arrtime!!
 
-                        hi.add(
-                            Item(
-                                busNm, waitbus, waittime
-                            )
-                        )
-
+            busViewmodel.stationinfoItem.observe(
+                this@Bus_StationInfo_Activity,
+                Observer {  busitem->
+                    binding.BusStationInfoRecyclerView.apply {
+                        adapter = busStationInfo_Adapater
+                        layoutManager = LinearLayoutManager(context)
+                        busStationInfo_Adapater.submitList(busitem)
                     }
-                    Log.d(Util.TAG, "\n 전체값 리스트 : $hi \n")
-
-
-                    val firstList = hi.filterIndexed { index, i ->
-
-                        index % 2 == 0
-                    }
-
-
-                    val secondList = hi.filterIndexed { index, item ->
-                        index % 2 == 1
-                    }
-
-
-                    val ResultList = mutableListOf<Item>()
-
-
-                    firstList.forEach {
-                        val ARouteNo = it.routeno
-                        val AWaitstation = it.arrprevstationcnt
-                        val AWaitTime = it.arrtime
-
-
-                        secondList.forEach {
-                            val BRouteNo = it.routeno
-                            val BWaitstation = it.arrprevstationcnt
-
-                            if (ARouteNo == BRouteNo) {
-                                if (AWaitstation!! > BWaitstation!!) {
-                                    ResultList.add(
-                                        Item(
-                                            it.routeno,
-                                            it.arrprevstationcnt,
-                                            it.arrtime
-                                        )
-                                    )
-
-                                } else {
-                                    ResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
-                                }
-                            }
-
-                        }
-
-                        //viewmodelCall
-                        busViewmodel.setStationInfoItem(ResultList)
-
-
-                        busViewmodel.stationinfoItem.observe(
-                            this@Bus_StationInfo_Activity,
-                            Observer { it ->
-                                BusStationInfoRecyclerView.apply {
-                                    adapter = busStationInfo_Adapater
-                                    layoutManager = LinearLayoutManager(context)
-                                    busStationInfo_Adapater.submitList(it)
-                                }
-                            })
-
-
-                    }
-
-                }
-
-            }
-
-            override fun onFailure(call: Call<Bus>, t: Throwable) {
-                Log.d(Util.TAG, "오류: $t")
-            }
-
+                })
         })
     }
+
 
 
     //버스 즐겨찾기 추가

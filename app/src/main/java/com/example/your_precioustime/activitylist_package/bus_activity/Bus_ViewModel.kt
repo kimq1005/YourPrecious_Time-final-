@@ -29,9 +29,6 @@ class Bus_ViewModel:ViewModel() {
 
 
 
-
-
-
     // Bus_Activity의 버스검색 데이터
     fun setStationBusItem(list : List<StationItem>){
         _stationItem.value = list
