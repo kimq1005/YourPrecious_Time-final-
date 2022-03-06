@@ -12,7 +12,6 @@ import com.example.your_precioustime.databinding.SubwayfavoritelistItemBinding
 import com.example.your_precioustime.roompackage.subway_room.SubwayFavoriteEntity
 
 
-//실제로 쓸 아답터
 class Subway_FavoriteAdpater(var onSubwayListDeleteInterFace: OnSubwayFavoriteListDeleteInterFace) :
     RecyclerView.Adapter<Subway_FavoriteAdpater.SubwayFVHolder>() {
     private var subwayFavoriteEntity = emptyList<SubwayFavoriteEntity>()

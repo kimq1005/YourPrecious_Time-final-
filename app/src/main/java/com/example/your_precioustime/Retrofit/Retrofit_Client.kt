@@ -1,9 +1,8 @@
 package com.example.your_precioustime.Retrofit
 
-import com.example.your_precioustime.Model.OdsayModel.OdasyModel
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Url.Companion.BUS_API_KEY
-import com.google.gson.Gson
+
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import okhttp3.Interceptor
@@ -11,9 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.jaxb.JaxbConverterFactory
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
-import retrofit2.create
+
 
 //retrofit client 싱글톤 생성
 object Retrofit_Client {

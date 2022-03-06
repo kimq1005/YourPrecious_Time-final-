@@ -31,6 +31,8 @@ class SubwayAdapter : RecyclerView.Adapter<SubwayAdapter.MyViewHolder>() {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(subwayItem[position])
+
+        //지하철 노선에 따른 백그라운드 색상 변경
         when (subwayItem[position].subwayId) {
 
             "1" -> {

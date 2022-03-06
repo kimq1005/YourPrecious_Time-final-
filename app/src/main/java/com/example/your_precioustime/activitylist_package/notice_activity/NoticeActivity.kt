@@ -35,7 +35,7 @@ class NoticeActivity : AppCompatActivity() {
             noticeAdapter.submitList(
                 listOf(
                 NoticeItem(
-                    "나는 전설이다가 출시되었습니다!","2022.02.03"
+                    "나는 전설이다가 출시되었습니다!","2022.00.00"
                 )
             ))
         }

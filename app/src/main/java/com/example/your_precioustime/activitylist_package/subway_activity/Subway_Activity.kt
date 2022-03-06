@@ -33,10 +33,8 @@ class Subway_Activity : AppCompatActivity() {
     private var subwayBinding: ActivitySubwayBinding? = null
     private val binding get() = subwayBinding!!
 
-    private lateinit var subwayViewModel: SubwayViewModel
-
-
     lateinit var subwayAdapter: SubwayAdapter
+    private lateinit var subwayViewModel: SubwayViewModel
     private lateinit var subwayRoomViewModel: Subway_FavoriteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,26 +57,34 @@ class Subway_Activity : AppCompatActivity() {
         )
 
 
-
         binding.backbtn.setOnClickListener {
             onBackPressed()
             finish()
         }
 
+        subwaySwipe()
+        subwaySearchBtnClicked()
 
 
+    }
 
+    private fun subwaySwipe(){
         binding.subwaySwipe.setOnRefreshListener {
             val searchtext = binding.SearchEditText.text.toString()
             binding.subtitleTextView.text = searchtext
             binding.subwayfavroiteAddImageView.visibility = View.VISIBLE
             binding.subtitleTextView.visibility = View.VISIBLE
+
             subwaySetRecyclerView(searchtext)
+
             binding.subwaySwipe.isRefreshing = false
         }
+    }
 
+    private fun subwaySearchBtnClicked () {
         binding.SubwaySearchBtn.setOnClickListener {
             subwayFavoriteChecking()
+
             val searchtext = binding.SearchEditText.text.toString()
             binding.subtitleTextView.text = searchtext
             binding.subwayfavroiteAddImageView.visibility = View.VISIBLE
@@ -87,8 +93,6 @@ class Subway_Activity : AppCompatActivity() {
             subwaySetRecyclerView(searchtext)
 
         }
-
-
     }
 
 
@@ -149,6 +153,7 @@ class Subway_Activity : AppCompatActivity() {
                 }
             } else {
                 binding.subwayfavroiteAddImageView.setImageResource(R.drawable.star)
+
                 subwayRoomFavroiteInsert()
             }
 

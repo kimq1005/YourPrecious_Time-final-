@@ -30,8 +30,13 @@ class RealMainListActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
         val spinner: Spinner = binding.mySpinner
         spinner.onItemSelectedListener = this
-        setSpinner(spinner)
 
+        setSpinner(spinner)
+        intentBtnClick()
+
+    }
+
+    private fun intentBtnClick() {
         binding.busView.setOnClickListener {
             val mycitycode: String =
                 citycodeCallObject.citycodeCallObject.citycode(binding.citynameTextView.text.toString())
@@ -81,8 +86,6 @@ class RealMainListActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         }
 
         startActivity(Intent.createChooser(shareintent, null))
-
-
 
     }
 

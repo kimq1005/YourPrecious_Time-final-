@@ -22,7 +22,6 @@ import retrofit2.Call
 import retrofit2.Response
 
 
-//새로만든 엑티비티
 class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
     private var busFavroiteDeepInfoBinding: ActivityBusFavroiteDeepInfoBinding? = null
     private val binding get() = busFavroiteDeepInfoBinding!!

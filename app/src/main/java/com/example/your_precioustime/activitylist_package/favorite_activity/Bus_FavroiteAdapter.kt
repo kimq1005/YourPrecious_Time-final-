@@ -15,7 +15,6 @@ import com.example.your_precioustime.roompackage.bus_room.BusFavoriteEntity
 import kotlinx.android.synthetic.main.subwayfavoritelist_item.view.*
 
 
-//실제로쓸 아답터 ViewModel , DataBinding
 class Bus_FavroiteAdapter(var onBusFavroiteListDeleteInterFace: OnBusFavroiteListDeleteInterFace) : RecyclerView.Adapter<Bus_FavroiteAdapter.BusFavoriteViewHolder>() {
     private var busfavoriteEntity = emptyList<BusFavoriteEntity>()
 

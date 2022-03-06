@@ -14,6 +14,5 @@ class HelpActivity : AppCompatActivity() {
         helpActivity = ActivityHelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
     }
 }
