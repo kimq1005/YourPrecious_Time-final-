@@ -15,9 +15,10 @@ import retrofit2.converter.jaxb.JaxbConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import retrofit2.create
 
-
+//retrofit client 싱글톤 생성
 object Retrofit_Client {
 
+    //XML변환 Client
     fun getClient(baseurl: String): Retrofit {
 
         val client = OkHttpClient.Builder()
@@ -58,39 +59,12 @@ object Retrofit_Client {
 
     }
 
-
+    //Json 변환 Client
     fun getJsonClienet(baseUrl: String): Retrofit {
-
-        val client = OkHttpClient.Builder()
-
-
-        val baseInterceptor: Interceptor = (object : Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-
-                val realRequest = chain.request()
-
-                val goaddurl = realRequest
-                    .url()
-                    .newBuilder()
-                    .addQueryParameter("apiKey", Url.ODSAY_API_KEY)
-                    .build()
-
-                val lastRequest = realRequest.newBuilder()
-                    .url(goaddurl)
-                    .build()
-
-                return chain.proceed(lastRequest)
-            }
-
-        })
-
-
-        client.addInterceptor(baseInterceptor)
 
         val retrofitclient = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(client.build())
             .build()
 
         return retrofitclient

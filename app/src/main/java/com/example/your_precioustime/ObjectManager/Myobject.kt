@@ -58,7 +58,7 @@ class Myobject {
 
     }
 
-
+    //지하철 남은역 반환 함수
     fun changeSubwayText(mytext: String): String {
         if (mytext.contains("[")) {
             val one = mytext.replace("[", "")
@@ -73,7 +73,7 @@ class Myobject {
         return mytext
     }
 
-
+    //지하철역 방면 반환 함수
     fun changeSubwayResultText(mytext: String): String {
         if (mytext.contains("-")) {
             val one = mytext.replace(" ", "")

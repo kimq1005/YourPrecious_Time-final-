@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.your_precioustime.App
 
+//도시 코드를 저장하기 위한 Sharedpreferences 함수
 class citycodeSaveClass(context: Context) {
 
     companion object{

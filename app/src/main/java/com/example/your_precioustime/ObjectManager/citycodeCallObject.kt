@@ -9,7 +9,7 @@ class citycodeCallObject {
        val citycodeCallObject = citycodeCallObject()
     }
 
-
+    //도시명(이름)을 입력시 도시코드 반환 함수
     fun citycode(cityname:String): String {
         when(cityname){
             "수원"->{
@@ -137,7 +137,7 @@ class citycodeCallObject {
         return "31010"
     }
 
-
+    //도시코드 입력시 도시명(이름) 반환 함수
     fun returncitynamecode(cityname:String): String {
         when(cityname){
             "31010"->{
