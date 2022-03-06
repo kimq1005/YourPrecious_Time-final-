@@ -8,18 +8,6 @@ class Url {
 
         const val BUS_GET_URL="ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"
 
-
-        const val BUS_CITY_URL= "ArvlInfoInqireService/getCtyCodeList"
-
-        const val TMAP_BASE_URL="https://apis.openapi.sk.com/"
-        const val TMAP_LOCATION_URL="tmap/pois"
-        const val TMAP_API_KEY ="l7xx84883d1977714ff8a5c2568c34903e85"
-
-        const val ODSAY_BASE_URL ="https://api.odsay.com/"
-        const val ODSAY_POI_URL ="v1/api/pointSearch"
-        const val ODSAY_API_KEY="ZkqhFIasLHBpaDaOdYx5CYwRwh8r2UFgYg7NazJgWXw"
-
-
         const val SEOUL_SUBWAY_MAIN_URL="http://swopenAPI.seoul.go.kr/"
         const val SUBWAY_PATH_URL="api/subway/{KEY}/{TYPE}/{SERVICE}/{START_INDEX}/{END_INDEX}/{statnNm}"
     }

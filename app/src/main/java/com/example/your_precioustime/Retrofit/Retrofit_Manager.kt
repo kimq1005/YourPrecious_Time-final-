@@ -17,6 +17,11 @@ import com.example.your_precioustime.activitylist_package.bus_activity.BusStatio
 import com.example.your_precioustime.activitylist_package.bus_activity.Bus_Station_Search_Adapter
 import com.example.your_precioustime.activitylist_package.bus_activity.Bus_ViewModel
 import com.example.your_precioustime.mo_del.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Response
 
@@ -38,24 +43,26 @@ class Retrofit_Manager {
 
 
     //버스 정류장명(이름) 가져오기 함수
-    fun getbusCall(citycode:String, stationName:String?, mymodel: (List<StationItem>) -> Unit){
+    fun getbusCall(citycode:String, stationName:String?, nodeno:String?,mymodel: (List<StationItem>) -> Unit){
 
 
         val stationcalls = busretrofitInterface.StationNameGet(
             cityCode = citycode,
             staionName = stationName,
-            null
+            nodeNo = nodeno
         )
 
         stationcalls.enqueue(object : retrofit2.Callback<StationBus> {
             override fun onResponse(call: Call<StationBus>, response: Response<StationBus>) {
                 val body = response.body()
-
+//                Log.d(TAG, " getbusCall() 함수 body : $body")
 
                 body?.let { it ->
                     val stationitem = body.body.items.item
                     mymodel(stationitem)
+//                    Log.d(TAG, "getbusCall() 함수 stationitem : $stationitem")
                 }
+
 
 
             }
@@ -68,6 +75,7 @@ class Retrofit_Manager {
     }
 
 
+
     //버스 정류장명(이름)에 대한 정보 가져오기 함수
     fun getbusStationInfoCall(citycode: String , stationNodeNumber:String,mymodel: (List<Item>) -> Unit ){
 
@@ -77,10 +85,11 @@ class Retrofit_Manager {
             override fun onResponse(call: Call<Bus>, response: Response<Bus>) {
 
                 val body = response.body()
+//                Log.d(TAG, "getbusStationInfoCall() 함수 body : $body")
 
                 body?.let {
                     val itemList = body.body.items.item
-                    val hi = mutableListOf<Item>()
+                    val mutableItemList = mutableListOf<Item>()
 
                     for (i in itemList.indices) {
                         val busNm: String
@@ -91,27 +100,29 @@ class Retrofit_Manager {
                         waitbus = itemList.get(i).arrprevstationcnt!!
                         waittime = itemList.get(i).arrtime!!
 
-                        hi.add(
+                        mutableItemList.add(
                             Item(
                                 busNm, waitbus, waittime
                             )
                         )
 
                     }
-                    Log.d(TAG, "\n 전체값 리스트 : $hi \n")
+
+                    Log.d(TAG, "\n 전체값 리스트 : $mutableItemList \n")
 
 
-                    val firstList = hi.filterIndexed { index, i ->
+                    val firstList = mutableItemList.filterIndexed { index, i ->
 
                         index % 2 == 0
                     }
 
 
-                    val secondList = hi.filterIndexed { index, item ->
+                    val secondList = mutableItemList.filterIndexed { index, item ->
                         index % 2 == 1
                     }
 
 
+                    //같은 번호의 버스 중 가장 빠르게 오는 버스를 띄위기 위한 리스트 생성
                     val ResultList = mutableListOf<Item>()
 
 
@@ -153,7 +164,7 @@ class Retrofit_Manager {
             }
 
             override fun onFailure(call: Call<Bus>, t: Throwable) {
-                Log.d(Util.TAG, "오류: $t")
+                Log.d(TAG, "오류: $t")
             }
 
         })
@@ -200,7 +211,7 @@ class Retrofit_Manager {
                     }
 
 
-                    Log.d(TAG, "onResponse: $subwaymodel")
+//                    Log.d(TAG, "getsubwayCall() 함수 subwaymodel : $subwaymodel")
 
                     for (i in subwaymodel.indices) {
                         when (subwaymodel[i].subwayId) {

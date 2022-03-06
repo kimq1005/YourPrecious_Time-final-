@@ -18,6 +18,7 @@ import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.R
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
+import com.example.your_precioustime.Retrofit.Retrofit_Manager
 import com.example.your_precioustime.SecondActivity.DB.SubwayDB.TestFavoriteModel
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
@@ -58,7 +59,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         setMap()
-        SetBusStationRecyclerView()
+        setBusStationRecyclerView()
+
         SetmapView()
         BusrefreshView()
 
@@ -67,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun BusrefreshView() {
         binding.myrefreshView.setOnRefreshListener {
-            SetBusStationRecyclerView()
+            setBusStationRecyclerView()
             binding.myrefreshView.isRefreshing = false
         }
     }
@@ -82,6 +84,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
+
 
     //맵 정보 펼치기
     fun SetmapView() = with(binding) {
@@ -134,105 +137,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    private fun SetBusStationRecyclerView() = with(binding) {
 
+
+    private fun setBusStationRecyclerView(){
         val stationName = intent.getStringExtra("stationName").toString()
         binding.BusStationName.text = stationName
 
         val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-        val call = retrofitInterface.BusGet(citycode, stationNodeNumber)
 
-        call.enqueue(object : retrofit2.Callback<Bus> {
-            override fun onResponse(call: Call<Bus>, response: Response<Bus>) {
+        Retrofit_Manager.retrofitManager.getbusStationInfoCall(citycode,stationNodeNumber,
+            mymodel = { busitem->
                 busStationInfo_Adapater = BusStationInfo_Adpater()
 
-                val body = response.body()
-
-                body?.let {
-                    val itemList = body.body.items.item
-
-                    val hi = mutableListOf<Item>()
-
-                    for (i in itemList.indices) {
-                        val busNm: String
-                        val waitbus: Int
-                        val waittime: Int
-
-                        busNm = itemList.get(i).routeno!!
-                        waitbus = itemList.get(i).arrprevstationcnt!!
-                        waittime = itemList.get(i).arrtime!!
-
-                        hi.add(
-                            Item(
-                                busNm, waitbus, waittime
-                            )
-                        )
-
-                    }
-                    Log.d(TAG, "\n 전체값 리스트 : $hi \n")
+                //viewmodelCall
+                busViewmodel.setStationInfoItem(busitem)
 
 
-                    val firstList = hi.filterIndexed { index, i ->
-                        index % 2 == 0
-                    }
-
-                    val secondList = hi.filterIndexed { index, item ->
-                        index % 2 == 1
-                    }
-                    val ResultList = mutableListOf<Item>()
-
-
-                    firstList.forEach {
-                        val ARouteNo = it.routeno
-                        val AWaitstation = it.arrprevstationcnt
-                        val AWaitTime = it.arrtime
-
-
-                        secondList.forEach {
-                            val BRouteNo = it.routeno
-                            val BWaitstation = it.arrprevstationcnt
-
-                            if (ARouteNo == BRouteNo) {
-                                if (AWaitstation!! > BWaitstation!!) {
-                                    ResultList.add(
-                                        Item(
-                                            it.routeno,
-                                            it.arrprevstationcnt,
-                                            it.arrtime
-                                        )
-                                    )
-
-                                } else {
-                                    ResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
-                                }
-                            }
-
+                busViewmodel.stationinfoItem.observe(
+                    this@MapsActivity,
+                    Observer {  setbusitem->
+                        binding.busreclerView.apply {
+                            adapter = busStationInfo_Adapater
+                            layoutManager = LinearLayoutManager(context)
+                            busStationInfo_Adapater.submitList(setbusitem)
                         }
-
-                        busViewmodel.setStationInfoItem(ResultList)
-                        busViewmodel.stationinfoItem.observe(this@MapsActivity, Observer {
-                            busreclerView.apply {
-                                adapter = busStationInfo_Adapater
-                                layoutManager = LinearLayoutManager(context)
-                                busStationInfo_Adapater.submitList(it)
-                            }
-                        })
-
-
-                    }
-
-                }
-
-            }
-
-            override fun onFailure(call: Call<Bus>, t: Throwable) {
-                Log.d(TAG, "오류: $t")
-            }
-
-        })
-
-
+                    })
+            })
     }
 
 

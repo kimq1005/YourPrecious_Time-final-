@@ -59,7 +59,7 @@ class Bus_Activity : AppCompatActivity() {
 
     //버스 정류장명(이름) 가져오기 함수 및 LiveData, ViewModel 사용한 RecyclerView Set
     private fun setLiveDataRecyclerView(citycode: String, stationName: String?){
-        Retrofit_Manager.retrofitManager.getbusCall(citycode,stationName,
+        Retrofit_Manager.retrofitManager.getbusCall(citycode,stationName, null,
         mymodel = {stationitem->
             busStationSearchAdapter = Bus_Station_Search_Adapter()
 
@@ -80,10 +80,10 @@ class Bus_Activity : AppCompatActivity() {
 
 
 
-    private fun ClickSearchBtn() = with(binding) {
-        clickhere.setOnClickListener {
+    private fun ClickSearchBtn()  {
+        binding.clickhere.setOnClickListener {
             val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-            val StationEditName = SearchEditText.text.toString()
+            val StationEditName = binding.SearchEditText.text.toString()
             setLiveDataRecyclerView(citycode, StationEditName)
         }
 

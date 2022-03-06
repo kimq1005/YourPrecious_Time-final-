@@ -41,21 +41,5 @@ interface Retrofit_InterFace {
 
 
 
-    @GET(Url.TMAP_LOCATION_URL)
-    fun MapLocationGet(
-        @Query("version") version:Int=1,
-        @Query("appKey") appKey:String= Url.TMAP_API_KEY,
-        @Query("searchKeyword") searchKeyword:String
-    ): Call<MapPoiModel>
-
-    @GET(Url.ODSAY_POI_URL)
-    fun ODSAYMapLocationGet(
-        @Query("lang") lang:Int = 0,
-        @Query("x") xm:Double?,
-        @Query("y") ym:Double?,
-    ):Call<JsonElement>
-
-
-
 }
 
