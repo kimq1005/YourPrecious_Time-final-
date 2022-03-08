@@ -38,6 +38,7 @@
 * Retrofit2로 가져온 공공데이터들(XML , Json)을 원하는 뷰에 처리할 수 있음.
 
 
+
 # 📖배운점(2차)
 * MVVM패턴을 사용해봄으로써 이에 대한 이점과 개념을 알 수 있었음.
 * JetPack(DataBinding, LiveData, ViewModel, Room)의 사용법과 이점을 알게 되었음.
