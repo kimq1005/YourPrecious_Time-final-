@@ -4,9 +4,9 @@
 
 프로젝트는 총 2차로 구성했습니다. 
 
-1차. 기존에 알고있던 기술로 프로젝트를 완성하기  https://github.com/kimq1005/Your_PreciousTime (End).  
+1차. 초기 기획안으로 프로젝트 완성 (2021.10 ~ 2022.02 End)  https://github.com/kimq1005/Your_PreciousTime (End).  
 
-2차. 기존 코드에 코루틴, mvvm패턴을 도입해 성능향상 (ING).
+2차. 코드 리펙토링을 통한 성능향상 (2022.02 ~ Ing).
 
 
 
