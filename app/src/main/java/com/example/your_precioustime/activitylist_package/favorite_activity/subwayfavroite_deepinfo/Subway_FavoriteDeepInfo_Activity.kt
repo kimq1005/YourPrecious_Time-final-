@@ -7,12 +7,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.activitylist_package.subway_activity.SubwayAdapter
 import com.example.your_precioustime.ObjectManager.Myobject
+import com.example.your_precioustime.Retrofit.Coroutine_Manager
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
 import com.example.your_precioustime.Retrofit.Retrofit_Manager
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.activitylist_package.subway_activity.SubwayViewModel
 import com.example.your_precioustime.databinding.ActivitySubwayFavoriteDeepInfoBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() {
@@ -40,11 +44,13 @@ class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() {
         }
 
         binding.SubwayFavroiteSwipe.setOnRefreshListener {
-            setRecyclearView()
+//            setRecyclearView()
+            CoroutinesetRecyclearView()
             binding.SubwayFavroiteSwipe.isRefreshing = false
         }
 
-        setRecyclearView()
+//        setRecyclearView()
+        CoroutinesetRecyclearView()
 
         Myobject.myobject.ToggleSet(
             this,
@@ -57,10 +63,35 @@ class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() {
 
     }
 
+    private fun CoroutinesetRecyclearView(){
+        val subwayname = intent.getStringExtra("subwayname").toString()
+        binding.SubwayStationName.text = subwayname
+        CoroutineScope(Dispatchers.Main).launch {
+            Coroutine_Manager.coroutineManager.CoroutinegetsubwayCall(subwayname,null,null,null,
+                mymodel = { subwaymodel ->
+                    subwayAdapter = SubwayAdapter()
+
+                    subwayViewModel.setSubwayItem(subwaymodel)
+                    subwayViewModel.subwayItem.observe(this@Subway_FravoriteDeepInfo_Activity , Observer {
+                        binding.SubwayFVDeepInFoRecyclerView.apply {
+                            adapter = subwayAdapter
+                            layoutManager = LinearLayoutManager(this@Subway_FravoriteDeepInfo_Activity)
+                            subwayAdapter.submitList(it)
+                        }
+                    })
+
+                })
+        }
+
+    }
+
+
+
     private fun setRecyclearView() {
         val subwayname = intent.getStringExtra("subwayname").toString()
         binding.SubwayStationName.text = subwayname
-        Retrofit_Manager.retrofitManager.getsubwayCall(subwayname, null,null,null,mymodel = { subwaymodel ->
+        Retrofit_Manager.retrofitManager.getsubwayCall(subwayname, null,null,null,
+            mymodel = { subwaymodel ->
             subwayAdapter = SubwayAdapter()
 
             subwayViewModel.setSubwayItem(subwaymodel)

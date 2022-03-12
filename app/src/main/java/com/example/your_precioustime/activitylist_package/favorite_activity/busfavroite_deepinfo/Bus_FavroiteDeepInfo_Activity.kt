@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.mo_del.Bus
 import com.example.your_precioustime.mo_del.Item
 import com.example.your_precioustime.ObjectManager.Myobject
+import com.example.your_precioustime.Retrofit.Coroutine_Manager
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
 import com.example.your_precioustime.Retrofit.Retrofit_Manager
@@ -18,6 +19,9 @@ import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.activitylist_package.bus_activity.Bus_ViewModel
 import com.example.your_precioustime.databinding.ActivityBusFavroiteDeepInfoBinding
 import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -44,7 +48,8 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
             finish()
         }
 
-        BusfavoriteRecyclerViewSet()
+//        BusfavoriteRecyclerViewSet()
+        CoroutineBusfavoriteRecyclerViewSet()
 
 
         SetFreshView()
@@ -60,6 +65,35 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
         )
 
 
+    }
+
+    //코루틴을 활용한 버스 정류장명(이름)에 대한 정보 가져오기 함수 불러오기 및 Recyclerview Set
+    private fun CoroutineBusfavoriteRecyclerViewSet(){
+        val favoritenodenum = intent.getStringExtra("favoritenodenum").toString()
+        val favoriteStationName = intent.getStringExtra("favoriteStationName").toString()
+        val citycode = intent.getStringExtra("citycode").toString()
+
+        binding.BusStationName.text = favoriteStationName
+
+        CoroutineScope(Dispatchers.Main).launch {
+            Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode , favoritenodenum,
+                mymodel = { busitem->
+                    DFadapter = Bus_DeepFavoriteAdapter()
+
+                    busViewmodel.setStationInfoItem(busitem)
+
+                    busViewmodel.stationinfoItem.observe(
+                        this@Bus_FavroiteDeepInfo_Activity,
+                        Observer { setbusitem->
+                            binding.FravroitestationinfoRecyclerView.apply {
+                                adapter = DFadapter
+                                layoutManager = LinearLayoutManager(context)
+                                DFadapter.submitlist(setbusitem)
+                            }
+                        })
+
+                })
+        }
     }
 
 
@@ -92,7 +126,8 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
 
     private fun SetFreshView() {
         binding.BusFavroiteSwipe.setOnRefreshListener {
-            BusfavoriteRecyclerViewSet()
+//            BusfavoriteRecyclerViewSet()
+            CoroutineBusfavoriteRecyclerViewSet()
             binding.BusFavroiteSwipe.isRefreshing = false
         }
     }

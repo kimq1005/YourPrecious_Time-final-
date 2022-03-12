@@ -13,6 +13,7 @@ import com.example.your_precioustime.mo_del.SubwayItem
 import com.example.your_precioustime.Model.SubwayModel.SubwayModel
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.R
+import com.example.your_precioustime.Retrofit.Coroutine_Manager
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
 import com.example.your_precioustime.Retrofit.Retrofit_Manager
@@ -23,6 +24,9 @@ import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.ActivitySubwayBinding
 import com.example.your_precioustime.roompackage.subway_room.SubwayFavoriteEntity
 import com.example.your_precioustime.roompackage.subway_room.Subway_FavoriteViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -68,20 +72,21 @@ class Subway_Activity : AppCompatActivity() {
 
     }
 
-    private fun subwaySwipe(){
+    private fun subwaySwipe() {
         binding.subwaySwipe.setOnRefreshListener {
             val searchtext = binding.SearchEditText.text.toString()
             binding.subtitleTextView.text = searchtext
             binding.subwayfavroiteAddImageView.visibility = View.VISIBLE
             binding.subtitleTextView.visibility = View.VISIBLE
 
-            subwaySetRecyclerView(searchtext)
+//            subwaySetRecyclerView(searchtext)
+            CoroutinesubwaySetRecyclerView(searchtext)
 
             binding.subwaySwipe.isRefreshing = false
         }
     }
 
-    private fun subwaySearchBtnClicked () {
+    private fun subwaySearchBtnClicked() {
         binding.SubwaySearchBtn.setOnClickListener {
             subwayFavoriteChecking()
 
@@ -90,9 +95,41 @@ class Subway_Activity : AppCompatActivity() {
             binding.subwayfavroiteAddImageView.visibility = View.VISIBLE
             binding.subtitleTextView.visibility = View.VISIBLE
             binding.secondunderline.visibility = View.VISIBLE
-            subwaySetRecyclerView(searchtext)
+//            subwaySetRecyclerView(searchtext)
+            CoroutinesubwaySetRecyclerView(searchtext)
 
         }
+    }
+
+    //Coroutine을 활용한 RecyclerViewSet
+    private fun CoroutinesubwaySetRecyclerView(statNm: String) {
+        val snackview = binding.subwayActivity
+        val subtitle = binding.subtitleTextView
+        val favoriteimage = binding.subwayfavroiteAddImageView
+
+        CoroutineScope(Dispatchers.Main).launch {
+            Coroutine_Manager.coroutineManager.CoroutinegetsubwayCall(
+                statNm,
+                snackview,
+                subtitle,
+                favoriteimage,
+                mymodel = { subwaymodel ->
+                    subwayAdapter = SubwayAdapter()
+
+                    subwayViewModel.setSubwayItem(subwaymodel)
+                    subwayViewModel.subwayItem.observe(this@Subway_Activity, Observer {
+                        binding.subwayRecyclerView.apply {
+                            adapter = subwayAdapter
+                            layoutManager = LinearLayoutManager(this@Subway_Activity)
+                            subwayAdapter.submitList(it)
+                        }
+                    })
+
+                })
+
+        }
+
+
     }
 
 

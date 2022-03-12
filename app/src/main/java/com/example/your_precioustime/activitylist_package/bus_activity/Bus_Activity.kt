@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.mo_del.StationBus
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
+import com.example.your_precioustime.Retrofit.Coroutine_Manager
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
 import com.example.your_precioustime.Retrofit.Retrofit_Manager
@@ -64,7 +65,7 @@ class Bus_Activity : AppCompatActivity() {
     //코루틴을 활용한 recyclerViewSet
     private fun CorutinesetLiveDataRecyclerView(citycode: String, stationName: String?){
         CoroutineScope(Dispatchers.Main).launch {
-            Retrofit_Manager.retrofitManager.getCoroutinegetbusCall(citycode , stationName , null,
+            Coroutine_Manager.coroutineManager.getCoroutinegetbusCall(citycode , stationName , null,
             mymodel = {stationitem->
                 busStationSearchAdapter = Bus_Station_Search_Adapter()
 

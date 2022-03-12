@@ -38,6 +38,9 @@ interface Retrofit_InterFace {
     ):Call<SubwayModel>
 
 
+
+
+
     @GET(Url.BUS_NAME_SEARCH)
     suspend fun CoroutineStationNameGet(
         @Query("cityCode") cityCode:String,
@@ -52,6 +55,18 @@ interface Retrofit_InterFace {
         @Query("cityCode") cityCode:String,
         @Query("nodeId") nodeId:String
     ): Response<Bus>
+
+
+
+    @GET(Url.SUBWAY_PATH_URL)
+    suspend fun CoroutineSUBWAYGET(
+        @Path("KEY") KEY :String = "6749736c6b6b696d38365266596579",
+        @Path("TYPE") TYPE:String = "json",
+        @Path("SERVICE") SERVICE:String="realtimeStationArrival",
+        @Path("START_INDEX") START_INDEX:Int = 0,
+        @Path("END_INDEX") END_INDEX:Int = 5,
+        @Path("statnNm") statnNm:String
+    ):Response<SubwayModel>
 
 
 

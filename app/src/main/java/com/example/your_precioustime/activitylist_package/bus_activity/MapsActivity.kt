@@ -16,6 +16,7 @@ import com.example.your_precioustime.mo_del.StationBus
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.R
+import com.example.your_precioustime.Retrofit.Coroutine_Manager
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
 import com.example.your_precioustime.Retrofit.Retrofit_Manager
@@ -149,7 +150,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
 
         CoroutineScope(Dispatchers.Main).launch {
-           Retrofit_Manager.retrofitManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
+           Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
                mymodel ={busitem->
                    busStationInfo_Adapater = BusStationInfo_Adpater()
 

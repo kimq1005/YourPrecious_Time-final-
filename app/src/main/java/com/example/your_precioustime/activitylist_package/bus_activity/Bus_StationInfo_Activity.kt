@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.R
+import com.example.your_precioustime.Retrofit.Coroutine_Manager
 import com.example.your_precioustime.Retrofit.Retrofit_Manager
 
 import com.example.your_precioustime.databinding.ActivityBusStationInfoBinding
@@ -98,7 +99,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
 
         CoroutineScope(Dispatchers.Main).launch {
-            Retrofit_Manager.retrofitManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
+            Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
                 mymodel = { busitem->
                     busStationInfo_Adapater = BusStationInfo_Adpater()
 

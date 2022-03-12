@@ -45,27 +45,6 @@ class Retrofit_Manager {
         Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
 
 
-    //코루틴을 활용한 버스 정류장명(이름) 가져오기 함수
-    suspend fun getCoroutinegetbusCall(
-        citycode: String,
-        stationName: String?,
-        nodeno: String?,
-        mymodel: (List<StationItem>) -> Unit
-    ) {
-
-
-        val stationcalls = busretrofitInterface.CoroutineStationNameGet(
-            citycode, stationName, nodeno
-        )
-
-        if (stationcalls.isSuccessful) {
-            val stationitem = stationcalls.body()!!.body.items.item
-            mymodel(stationitem)
-        }
-
-
-    }
-
     //버스 정류장명(이름) 가져오기 함수
     fun getbusCall(
         citycode: String,
@@ -100,89 +79,6 @@ class Retrofit_Manager {
             }
 
         })
-    }
-
-
-    suspend fun CoroutinegetbusStationInfoCall(
-        citycode: String,
-        stationNodeNumber: String,
-        mymodel: (List<Item>) -> Unit
-    ){
-        val call = busretrofitInterface.CoroutineBusGet(citycode,stationNodeNumber)
-        if(call.isSuccessful){
-            val mutableItemList = mutableListOf<Item>()
-            val itemList = call.body()!!.body.items.item
-
-            for (i in itemList.indices) {
-                val busNm: String
-                val waitbus: Int
-                val waittime: Int
-
-                busNm = itemList.get(i).routeno!!
-                waitbus = itemList.get(i).arrprevstationcnt!!
-                waittime = itemList.get(i).arrtime!!
-
-                mutableItemList.add(
-                    Item(
-                        busNm, waitbus, waittime
-                    )
-                )
-
-            }
-
-            Log.d(TAG, "\n 전체값 리스트 : $mutableItemList \n")
-
-
-            //같은 버스의 정보가 연속으로 두개가 나와서 짝수, 홀수로 나눈다음 도착시간에 따른 우선순위에 따른 리스트를 가져옴
-            val firstList = mutableItemList.filterIndexed { index, i ->
-
-                index % 2 == 0
-            }
-
-
-            val secondList = mutableItemList.filterIndexed { index, item ->
-                index % 2 == 1
-            }
-
-
-            //같은 번호의 버스 중 가장 빠르게 오는 버스를 띄위기 위한 리스트 생성
-            val ResultList = mutableListOf<Item>()
-
-
-            firstList.forEach {
-                val ARouteNo = it.routeno
-                val AWaitstation = it.arrprevstationcnt
-                val AWaitTime = it.arrtime
-
-
-                secondList.forEach {
-                    val BRouteNo = it.routeno
-                    val BWaitstation = it.arrprevstationcnt
-
-                    if (ARouteNo == BRouteNo) {
-                        if (AWaitstation!! > BWaitstation!!) {
-                            ResultList.add(
-                                Item(
-                                    it.routeno,
-                                    it.arrprevstationcnt,
-                                    it.arrtime
-                                )
-                            )
-
-                        } else {
-                            ResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
-                        }
-                    }
-
-                }
-
-                mymodel(ResultList)
-
-
-            }
-
-        }
-
     }
 
 
