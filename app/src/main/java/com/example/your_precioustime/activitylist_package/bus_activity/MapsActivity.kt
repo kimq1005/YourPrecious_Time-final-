@@ -29,6 +29,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.example.your_precioustime.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -59,8 +62,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         setMap()
-        setBusStationRecyclerView()
-
+//        setBusStationRecyclerView()
+        CoroutineSetBusStationRecyclerView()
         SetmapView()
         BusrefreshView()
 
@@ -69,7 +72,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun BusrefreshView() {
         binding.myrefreshView.setOnRefreshListener {
-            setBusStationRecyclerView()
+//            setBusStationRecyclerView()
+            CoroutineSetBusStationRecyclerView()
             binding.myrefreshView.isRefreshing = false
         }
     }
@@ -133,6 +137,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         })
 
+
+    }
+
+    private fun CoroutineSetBusStationRecyclerView(){
+
+        val stationName = intent.getStringExtra("stationName").toString()
+        binding.BusStationName.text = stationName
+
+        val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
+        val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+
+        CoroutineScope(Dispatchers.Main).launch {
+           Retrofit_Manager.retrofitManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
+               mymodel ={busitem->
+                   busStationInfo_Adapater = BusStationInfo_Adpater()
+
+                   //viewmodelCall
+                   busViewmodel.setStationInfoItem(busitem)
+
+
+                   busViewmodel.stationinfoItem.observe(
+                       this@MapsActivity,
+                       Observer {  setbusitem->
+                           binding.busreclerView.apply {
+                               adapter = busStationInfo_Adapater
+                               layoutManager = LinearLayoutManager(context)
+                               busStationInfo_Adapater.submitList(setbusitem)
+                           }
+                       })
+               })
+
+        }
 
     }
 

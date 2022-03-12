@@ -6,6 +6,7 @@ import com.example.your_precioustime.Url
 import com.example.your_precioustime.mo_del.Bus
 import com.example.your_precioustime.mo_del.StationBus
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface Retrofit_InterFace {
@@ -35,6 +36,23 @@ interface Retrofit_InterFace {
         @Path("END_INDEX") END_INDEX:Int = 5,
         @Path("statnNm") statnNm:String
     ):Call<SubwayModel>
+
+
+    @GET(Url.BUS_NAME_SEARCH)
+    suspend fun CoroutineStationNameGet(
+        @Query("cityCode") cityCode:String,
+        @Query("nodeNm") staionName:String?,
+        @Query("nodeNo") nodeNo:String?
+    ) :Response<StationBus>
+
+
+    @GET(Url.BUS_GET_URL)
+    suspend fun CoroutineBusGet(
+//        @Header("serviceKey") serviceKey:String,
+        @Query("cityCode") cityCode:String,
+        @Query("nodeId") nodeId:String
+    ): Response<Bus>
+
 
 
 

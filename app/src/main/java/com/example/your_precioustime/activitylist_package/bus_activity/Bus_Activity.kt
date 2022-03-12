@@ -16,6 +16,9 @@ import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
 import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.ActivityBusBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -40,7 +43,8 @@ class Bus_Activity : AppCompatActivity() {
         }
 
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-        setLiveDataRecyclerView(citycode, null)
+        CorutinesetLiveDataRecyclerView(citycode, null)
+//        setLiveDataRecyclerView(citycode, null)
         bus_ViewModel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
 
 
@@ -54,6 +58,29 @@ class Bus_Activity : AppCompatActivity() {
         )
 
         ClickSearchBtn()
+
+    }
+
+    //코루틴을 활용한 recyclerViewSet
+    private fun CorutinesetLiveDataRecyclerView(citycode: String, stationName: String?){
+        CoroutineScope(Dispatchers.Main).launch {
+            Retrofit_Manager.retrofitManager.getCoroutinegetbusCall(citycode , stationName , null,
+            mymodel = {stationitem->
+                busStationSearchAdapter = Bus_Station_Search_Adapter()
+
+                bus_ViewModel.setStationBusItem(stationitem)
+
+                bus_ViewModel.stationItem.observe(this@Bus_Activity , Observer {
+                    binding.busRecyclerView.apply {
+                        adapter = busStationSearchAdapter
+                        layoutManager = LinearLayoutManager(context)
+                        busStationSearchAdapter.submitList(it)
+                    }
+                })
+
+            })
+
+        }
 
     }
 
@@ -84,7 +111,8 @@ class Bus_Activity : AppCompatActivity() {
         binding.clickhere.setOnClickListener {
             val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
             val StationEditName = binding.SearchEditText.text.toString()
-            setLiveDataRecyclerView(citycode, StationEditName)
+//            setLiveDataRecyclerView(citycode, StationEditName)
+            CorutinesetLiveDataRecyclerView(citycode,StationEditName)
         }
 
     }

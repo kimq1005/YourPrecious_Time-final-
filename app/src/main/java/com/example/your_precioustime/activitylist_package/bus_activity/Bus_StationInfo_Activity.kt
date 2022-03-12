@@ -14,6 +14,9 @@ import com.example.your_precioustime.Retrofit.Retrofit_Manager
 
 import com.example.your_precioustime.databinding.ActivityBusStationInfoBinding
 import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("StaticFieldLeak")
@@ -45,7 +48,8 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
         MapsActivityIntent()
         SetFreshView()
-        LiveDataSetBusStationRecyclerView()
+//        LiveDataSetBusStationRecyclerView()
+        CoroutineLiveDataSetBusStationRecyclerView()
         busFavoriteChecking()
 
 
@@ -79,9 +83,42 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
     //새로고침
     private fun SetFreshView() {
         binding.BusInfoStationSwipeLayout.setOnRefreshListener {
-            LiveDataSetBusStationRecyclerView()
+//            LiveDataSetBusStationRecyclerView()
+            CoroutineLiveDataSetBusStationRecyclerView()
             binding.BusInfoStationSwipeLayout.isRefreshing = false
         }
+    }
+
+    //코루틴을 활용한 버스 정류장명(이름)에 대한 정보 가져오기 함수 불러오기 및 Recyclerview Set
+    private fun CoroutineLiveDataSetBusStationRecyclerView() {
+        val stationName = intent.getStringExtra("stationName").toString()
+        binding.BusInfoTitleTextView.text = stationName
+        binding.titleviewTitleTextView.text = stationName
+        val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+        val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            Retrofit_Manager.retrofitManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
+                mymodel = { busitem->
+                    busStationInfo_Adapater = BusStationInfo_Adpater()
+
+                    //viewmodelCall
+                    busViewmodel.setStationInfoItem(busitem)
+
+
+                    busViewmodel.stationinfoItem.observe(
+                        this@Bus_StationInfo_Activity,
+                        Observer {  setbusitem->
+                            binding.BusStationInfoRecyclerView.apply {
+                                adapter = busStationInfo_Adapater
+                                layoutManager = LinearLayoutManager(context)
+                                busStationInfo_Adapater.submitList(setbusitem)
+                            }
+                        })
+                })
+
+        }
+
     }
 
     //버스 정류장명(이름)에 대한 정보 가져오기 함수 불러오기 및 Recyclerview Set
