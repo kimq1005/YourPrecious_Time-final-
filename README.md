@@ -66,22 +66,26 @@
 
   <img src = "https://user-images.githubusercontent.com/68366753/154833313-2a0e1467-56d8-444a-8d4e-65f875c1fce5.png" width="25%" height="25%">   
     
-      
+ 
+
       
   
   
 * 정류장(역) 검색
 
-  <img src = "https://user-images.githubusercontent.com/68366753/154833313-2a0e1467-56d8-444a-8d4e-65f875c1fce5.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/154833623-b78084e8-0876-481e-81ee-37095d575020.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/154833637-3c48804e-a15b-4749-aed2-5c204424a4e3.png" width="20%" height="20%">
+  <img src = "https://user-images.githubusercontent.com/68366753/154833313-2a0e1467-56d8-444a-8d4e-65f875c1fce5.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/154833623-b78084e8-0876-481e-81ee-37095d575020.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/158539438-603df3ab-bbe9-4bb9-958d-98fc65828822.png" width="20%" height="20%">
   <img src = "https://user-images.githubusercontent.com/68366753/154833703-77f69573-f9a3-4a9e-be57-328d5554961b.png" width="20%" height="20%">
-  <img src = "https://user-images.githubusercontent.com/68366753/156972490-35405ebe-15b3-4945-828b-03424f39ebf0.png" width="20%" height="20%">
+  <img src = "https://user-images.githubusercontent.com/68366753/158539666-cb1849df-5f0e-4724-8672-4e3a06373d08.png" width="20%" height="20%">
  
 
+<!-- 
+<img width="361" alt="image" src="https://user-images.githubusercontent.com/68366753/158539987-e2f3b38a-c29b-430d-86ef-9aa23a9f547d.png">
+ -->
  
 
 * 즐겨찾기  
   
-  <img src = "https://user-images.githubusercontent.com/68366753/154833778-2555b0fb-5ad0-4151-9f2a-69a81e93b436.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/154833794-e0d1a9a0-d352-428f-b41f-8a97f8fed582.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/154833814-9eeed1a5-78d2-4b4a-976a-b6c8145bc3ca.png" width="20%" height="20%">  
+  <img src = "https://user-images.githubusercontent.com/68366753/154833778-2555b0fb-5ad0-4151-9f2a-69a81e93b436.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/158539987-e2f3b38a-c29b-430d-86ef-9aa23a9f547d.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/154833814-9eeed1a5-78d2-4b4a-976a-b6c8145bc3ca.png" width="20%" height="20%">  
   
   
 
