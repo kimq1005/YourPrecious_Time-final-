@@ -6,14 +6,11 @@ import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
 import com.example.your_precioustime.Util.Companion.TAG
-import com.example.your_precioustime.mo_del.Item
-import com.example.your_precioustime.mo_del.ResultBusItem
-import com.example.your_precioustime.mo_del.StationItem
-import com.example.your_precioustime.mo_del.SubwayItem
+import com.example.your_precioustime.mo_del.*
 
 class Coroutine_Manager {
 
-    companion object{
+    companion object {
         val coroutineManager = Coroutine_Manager()
     }
 
@@ -36,13 +33,24 @@ class Coroutine_Manager {
     ) {
 
 
-        val stationcalls = busretrofitInterface.CoroutineStationNameGet(
+        val call = busretrofitInterface.CoroutineStationNameGet(
             citycode, stationName, nodeno
         )
 
-        if (stationcalls.isSuccessful) {
-            val stationitem = stationcalls.body()!!.body.items.item
-            mymodel(stationitem)
+
+
+
+        if (call.isSuccessful) {
+            val stationitem = call.body()!!.body.items.item
+
+
+            if (stationitem != null) {
+                mymodel(stationitem)
+            }
+
+
+        } else {
+            Log.d(TAG, "getCoroutinegetbusCall: 오류")
         }
 
 
@@ -53,11 +61,11 @@ class Coroutine_Manager {
         citycode: String,
         stationNodeNumber: String,
 //        fastmodel: (List<Item> , List<Item>) -> Unit?,
-        resultmodel : (List<ResultBusItem>) -> Unit?
+        resultmodel: (List<ResultBusItem>) -> Unit?
 
-    ){
-        val call = busretrofitInterface.CoroutineBusGet(citycode,stationNodeNumber)
-        if(call.isSuccessful){
+    ) {
+        val call = busretrofitInterface.CoroutineBusGet(citycode, stationNodeNumber)
+        if (call.isSuccessful) {
             val mutableItemList = mutableListOf<Item>()
             val itemList = call.body()!!.body.items.item
 
@@ -124,21 +132,25 @@ class Coroutine_Manager {
                             )
 
 
-                            LateResultList.add(Item(ARouteNo,AWaitstation,AWaitTime))
+                            LateResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
 
-                            ResultModel.add(ResultBusItem(
-                                it.routeno, it.arrprevstationcnt, it.arrtime,
-                                ARouteNo,AWaitstation,AWaitTime
-                            ))
+                            ResultModel.add(
+                                ResultBusItem(
+                                    it.routeno, it.arrprevstationcnt, it.arrtime,
+                                    ARouteNo, AWaitstation, AWaitTime
+                                )
+                            )
 
                         } else {
                             FastResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
-                            LateResultList.add(Item(it.routeno, it.arrprevstationcnt,it.arrtime))
+                            LateResultList.add(Item(it.routeno, it.arrprevstationcnt, it.arrtime))
 
-                            ResultModel.add(ResultBusItem(
-                                ARouteNo , AWaitstation , AWaitTime,
-                                it.routeno , it.arrprevstationcnt , it.arrtime
-                            ))
+                            ResultModel.add(
+                                ResultBusItem(
+                                    ARouteNo, AWaitstation, AWaitTime,
+                                    it.routeno, it.arrprevstationcnt, it.arrtime
+                                )
+                            )
 
                         }
                     }
@@ -165,12 +177,12 @@ class Coroutine_Manager {
         subtitle: View?,
         favoriteimage: View?,
         mymodel: (MutableList<SubwayItem>) -> Unit
-    ){
+    ) {
         val call = subwayretrofitInterface.CoroutineSUBWAYGET(
             statnNm = statNm
         )
 
-        if(call.isSuccessful){
+        if (call.isSuccessful) {
             val subwaymodel = mutableListOf<SubwayItem>()
             val subwaycalllist = call.body()!!.realtimeArrivalList
 
@@ -268,10 +280,8 @@ class Coroutine_Manager {
             mymodel(subwaymodel)
 
 
-
         }
     }
-
 
 
 }
