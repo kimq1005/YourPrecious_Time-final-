@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -151,11 +152,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         CoroutineScope(Dispatchers.Main).launch {
            Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
-               mymodel ={busitem->
+               resultmodel ={resultmodel->
                    busStationInfo_Adapater = BusStationInfo_Adpater()
 
                    //viewmodelCall
-                   busViewmodel.setStationInfoItem(busitem)
+                   busViewmodel.setStationInfoItem(resultmodel)
 
 
                    busViewmodel.stationinfoItem.observe(
@@ -176,32 +177,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-    private fun setBusStationRecyclerView(){
-        val stationName = intent.getStringExtra("stationName").toString()
-        binding.BusStationName.text = stationName
-
-        val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
-        val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-
-        Retrofit_Manager.retrofitManager.getbusStationInfoCall(citycode,stationNodeNumber,
-            mymodel = { busitem->
-                busStationInfo_Adapater = BusStationInfo_Adpater()
-
-                //viewmodelCall
-                busViewmodel.setStationInfoItem(busitem)
-
-
-                busViewmodel.stationinfoItem.observe(
-                    this@MapsActivity,
-                    Observer {  setbusitem->
-                        binding.busreclerView.apply {
-                            adapter = busStationInfo_Adapater
-                            layoutManager = LinearLayoutManager(context)
-                            busStationInfo_Adapater.submitList(setbusitem)
-                        }
-                    })
-            })
-    }
+//    private fun setBusStationRecyclerView(){
+//        val stationName = intent.getStringExtra("stationName").toString()
+//        binding.BusStationName.text = stationName
+//
+//        val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
+//        val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+//
+//        Retrofit_Manager.retrofitManager.getbusStationInfoCall(citycode,stationNodeNumber,
+//            mymodel = { busitem->
+//                busStationInfo_Adapater = BusStationInfo_Adpater()
+//
+//                //viewmodelCall
+//                busViewmodel.setStationInfoItem(busitem)
+//
+//
+//                busViewmodel.stationinfoItem.observe(
+//                    this@MapsActivity,
+//                    Observer {  setbusitem->
+//                        binding.busreclerView.apply {
+//                            adapter = busStationInfo_Adapater
+//                            layoutManager = LinearLayoutManager(context)
+//                            busStationInfo_Adapater.submitList(setbusitem)
+//                        }
+//                    })
+//            })
+//    }
 
 
 }

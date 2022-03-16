@@ -7,15 +7,15 @@ import com.tickaroo.tikxml.annotation.Xml
 import java.io.Serializable
 
 data class BusModel(
-    val nodeid:String,
-    val nodenm:String,
-    val routeid:String,
-    val routeno:String,
-    val routetp:String,
-    val arrprevstationcnt:String,
-    val vehicletp:String,
-    val arrtime:String
-):Serializable
+    val nodeid: String,
+    val nodenm: String,
+    val routeid: String,
+    val routeno: String,
+    val routetp: String,
+    val arrprevstationcnt: String,
+    val vehicletp: String,
+    val arrtime: String
+) : Serializable
 
 
 //@Xml(name="response")
@@ -101,10 +101,7 @@ data class BusModel(
 //}
 
 
-
-
-
-@Xml(name="response")
+@Xml(name = "response")
 data class Bus(
     @Element
     val header: Header,
@@ -132,28 +129,58 @@ data class Body(
     @PropertyElement
     val totalCount: Int,
 )
+
 //
 @Xml
 data class Items(
     @Element(name = "item")
     val item: List<Item>
 )
+
 //
 @Xml
 data class Item(
-    @PropertyElement(name="routeno") var routeno : String?, //노선 번호
-    @PropertyElement(name="arrprevstationcnt") var arrprevstationcnt : Int?,    //남은 정류장  번호
-    @PropertyElement(name="arrtime") var arrtime : Int? // 남은 시간
+    @PropertyElement(name = "routeno") var routeno: String?, //노선 번호
+    @PropertyElement(name = "arrprevstationcnt") var arrprevstationcnt: Int?,    //남은 정류장  번호
+    @PropertyElement(name = "arrtime") var arrtime: Int? // 남은 시간
 
-){
-    constructor() : this(null,null,null)
+) {
+    constructor() : this(null, null, null)
 
-    val mytime : String
-        get(){
+    val mytime: String
+        get() {
             val converttime = arrtime?.div(60)
-
             return converttime.toString()
         }
+
+
+}
+
+
+data class ResultBusItem(
+    var fastrouteno :String?,
+    var fastarrprevstationcnt :Int?,
+    val fastarrtime:Int?,
+
+    var laterouteno :String?,
+    var latearrprevstationcnt :Int?,
+    val latearrtime:Int?,
+){
+    val fast_arrtime: String
+        get() {
+            val converttime = fastarrtime?.div(60)
+            return converttime.toString()
+        }
+
+
+   val late_arrtime : String
+    get() {
+        val converttime = latearrtime?.div(60)
+        return converttime.toString()
+   }
+
+
+
 }
 
 

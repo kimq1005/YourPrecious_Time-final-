@@ -69,10 +69,10 @@
         <entry key="app/src/main/res/layout/bus_favoritelist_item.xml" value="0.14221014492753623" />
         <entry key="app/src/main/res/layout/bus_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/bus_station_searchitem_layout.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/busfavorite_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/busfavorite_item.xml" value="0.165" />
         <entry key="app/src/main/res/layout/busfavroite_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/busfragment.xml" value="0.2953125" />
-        <entry key="app/src/main/res/layout/busitem_layout.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/busitem_layout.xml" value="0.335" />
         <entry key="app/src/main/res/layout/favoritelist_fragment.xml" value="0.23541666666666666" />
         <entry key="app/src/main/res/layout/favoritelist_item.xml" value="0.45" />
         <entry key="app/src/main/res/layout/favoritesbusitem_layout.xml" value="0.335" />

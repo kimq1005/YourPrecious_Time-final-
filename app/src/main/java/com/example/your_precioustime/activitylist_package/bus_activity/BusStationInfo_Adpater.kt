@@ -15,25 +15,38 @@ import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.SecondActivity.DB.BUSStationNameEntity
 import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.BusitemLayoutBinding
+import com.example.your_precioustime.mo_del.ResultBusItem
 
 
 @SuppressLint("StaticFieldLeak")
 class BusStationInfo_Adpater : RecyclerView.Adapter<BusStationInfo_Adpater.MyViewHolder>() {
 
-    private var item: List<Item>? = null
-
+//    private var item: List<Item>? = null
+    private var resultbusitem: List<ResultBusItem>? = null
 
     class MyViewHolder(val binding: BusitemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
         //data binding
-        fun bind(item: Item) {
+        fun bind(resultBusItem: ResultBusItem) {
             val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
             val cityname = citycodeCallObject.citycodeCallObject.returncitynamecode(citycode)
             binding.BusCityname.text = cityname
 
-            binding.item = item
+
+            binding.resultbutitem = resultBusItem
 
         }
+
+        //data binding
+//        fun bind(item: Item) {
+//            val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
+//            val cityname = citycodeCallObject.citycodeCallObject.returncitynamecode(citycode)
+//            binding.BusCityname.text = cityname
+//
+//
+//            binding.resultbutitem = item
+//
+//        }
 
 
     }
@@ -44,7 +57,7 @@ class BusStationInfo_Adpater : RecyclerView.Adapter<BusStationInfo_Adpater.MyVie
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        item?.get(position)?.let {
+        resultbusitem?.get(position)?.let {
             holder.bind(it)
         }
 
@@ -53,14 +66,14 @@ class BusStationInfo_Adpater : RecyclerView.Adapter<BusStationInfo_Adpater.MyVie
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: List<Item>) {
-        item = list
+    fun submitList(list: List<ResultBusItem> ) {
+        resultbusitem = list
         notifyDataSetChanged()
     }
 
 
     override fun getItemCount(): Int {
-        return item?.size!!
+        return resultbusitem?.size!!
     }
 
 

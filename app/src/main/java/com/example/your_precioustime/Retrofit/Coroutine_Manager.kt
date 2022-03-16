@@ -5,7 +5,9 @@ import android.view.View
 import com.example.your_precioustime.ObjectManager.Myobject
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
+import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.mo_del.Item
+import com.example.your_precioustime.mo_del.ResultBusItem
 import com.example.your_precioustime.mo_del.StationItem
 import com.example.your_precioustime.mo_del.SubwayItem
 
@@ -50,7 +52,9 @@ class Coroutine_Manager {
     suspend fun CoroutinegetbusStationInfoCall(
         citycode: String,
         stationNodeNumber: String,
-        mymodel: (List<Item>) -> Unit
+//        fastmodel: (List<Item> , List<Item>) -> Unit?,
+        resultmodel : (List<ResultBusItem>) -> Unit?
+
     ){
         val call = busretrofitInterface.CoroutineBusGet(citycode,stationNodeNumber)
         if(call.isSuccessful){
@@ -88,9 +92,15 @@ class Coroutine_Manager {
                 index % 2 == 1
             }
 
+            //first list , second list를 나누고 빠른건 ResultList, 느린건 secondResultList에
+
 
             //같은 번호의 버스 중 가장 빠르게 오는 버스를 띄위기 위한 리스트 생성
-            val ResultList = mutableListOf<Item>()
+            val FastResultList = mutableListOf<Item>()
+            val LateResultList = mutableListOf<Item>()
+
+            val ResultModel = mutableListOf<ResultBusItem>()
+
 
 
             firstList.forEach {
@@ -105,7 +115,7 @@ class Coroutine_Manager {
 
                     if (ARouteNo == BRouteNo) {
                         if (AWaitstation!! > BWaitstation!!) {
-                            ResultList.add(
+                            FastResultList.add(
                                 Item(
                                     it.routeno,
                                     it.arrprevstationcnt,
@@ -113,17 +123,36 @@ class Coroutine_Manager {
                                 )
                             )
 
+
+                            LateResultList.add(Item(ARouteNo,AWaitstation,AWaitTime))
+
+                            ResultModel.add(ResultBusItem(
+                                it.routeno, it.arrprevstationcnt, it.arrtime,
+                                ARouteNo,AWaitstation,AWaitTime
+                            ))
+
                         } else {
-                            ResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
+                            FastResultList.add(Item(ARouteNo, AWaitstation, AWaitTime))
+                            LateResultList.add(Item(it.routeno, it.arrprevstationcnt,it.arrtime))
+
+                            ResultModel.add(ResultBusItem(
+                                ARouteNo , AWaitstation , AWaitTime,
+                                it.routeno , it.arrprevstationcnt , it.arrtime
+                            ))
+
                         }
                     }
 
                 }
 
-                mymodel(ResultList)
+//                fastmodel(FastResultList, LateResultList)
+                resultmodel(ResultModel)
 
 
             }
+            Log.d(TAG, "FastModel 확인 : $FastResultList  ")
+            Log.d(TAG, "lateModel 확인 : $LateResultList  ")
+            Log.d(TAG, "ResultModel 확인 : $ResultModel ")
 
         }
 

@@ -2,10 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--    <data>-->
+    <!--        <variable-->
+    <!--            name="item"-->
+    <!--            type="com.example.your_precioustime.mo_del.Item" />-->
+    <!--    </data>-->
+
+
     <data>
+
         <variable
-            name="item"
-            type="com.example.your_precioustime.mo_del.Item" />
+            name="resultbutitem"
+            type="com.example.your_precioustime.mo_del.ResultBusItem" />
+
     </data>
 
 
@@ -38,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@{item.routeno.toString()}"
+            android:text="@{resultbutitem.fastrouteno.toString()}"
             android:textColor="#18551B"
             android:textSize="17sp"
             android:textStyle="bold"
@@ -79,7 +88,7 @@
                 android:id="@+id/waitTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{item.mytime}"
+                android:text="@{resultbutitem.fast_arrtime}"
                 android:textColor="@color/black" />
 
 
@@ -97,17 +106,77 @@
             android:id="@+id/restStationLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/lateStationLayout"
             android:layout_marginEnd="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/busicon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/busicon">
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <TextView
                 android:id="@+id/waitBusNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{item.arrprevstationcnt.toString()}"
+                android:text="@{resultbutitem.fastarrprevstationcnt.toString()}"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 번째 전"
+                android:textSize="12dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lateTimeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/restTimeLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/restTimeLayout"
+            app:layout_constraintStart_toStartOf="@+id/restTimeLayout">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="약 "
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:id="@+id/latewaitTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{resultbutitem.late_arrtime}"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분"
+                android:textColor="@color/black" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lateStationLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/restStationLayout"
+            app:layout_constraintStart_toStartOf="@id/restStationLayout"
+            app:layout_constraintBottom_toBottomOf="@id/lateTimeLayout"
+            app:layout_constraintTop_toTopOf="@id/lateTimeLayout">
+
+
+            <TextView
+                android:id="@+id/latewaitBusNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{resultbutitem.latearrprevstationcnt.toString()}"
                 android:textSize="12dp" />
 
             <TextView

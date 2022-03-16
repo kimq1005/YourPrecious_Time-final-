@@ -3,12 +3,14 @@ package com.example.your_precioustime.activitylist_package.favorite_activity.bus
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.your_precioustime.mo_del.Bus
 import com.example.your_precioustime.mo_del.Item
 import com.example.your_precioustime.ObjectManager.Myobject
+import com.example.your_precioustime.ObjectManager.citycodeSaveClass
 import com.example.your_precioustime.Retrofit.Coroutine_Manager
 import com.example.your_precioustime.Retrofit.Retrofit_Client
 import com.example.your_precioustime.Retrofit.Retrofit_InterFace
@@ -16,6 +18,7 @@ import com.example.your_precioustime.Retrofit.Retrofit_Manager
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.Util
 import com.example.your_precioustime.Util.Companion.TAG
+import com.example.your_precioustime.activitylist_package.bus_activity.BusStationInfo_Adpater
 import com.example.your_precioustime.activitylist_package.bus_activity.Bus_ViewModel
 import com.example.your_precioustime.databinding.ActivityBusFavroiteDeepInfoBinding
 import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
@@ -30,7 +33,7 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
     private var busFavroiteDeepInfoBinding: ActivityBusFavroiteDeepInfoBinding? = null
     private val binding get() = busFavroiteDeepInfoBinding!!
 
-    lateinit var DFadapter: Bus_DeepFavoriteAdapter
+    private lateinit var busStationInfo_Adapater: BusStationInfo_Adpater
 
     private lateinit var busViewmodel: Bus_ViewModel
 
@@ -48,7 +51,6 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
             finish()
         }
 
-//        BusfavoriteRecyclerViewSet()
         CoroutineBusfavoriteRecyclerViewSet()
 
 
@@ -68,65 +70,41 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
     }
 
     //코루틴을 활용한 버스 정류장명(이름)에 대한 정보 가져오기 함수 불러오기 및 Recyclerview Set
-    private fun CoroutineBusfavoriteRecyclerViewSet(){
+    private fun CoroutineBusfavoriteRecyclerViewSet() {
         val favoritenodenum = intent.getStringExtra("favoritenodenum").toString()
         val favoriteStationName = intent.getStringExtra("favoriteStationName").toString()
         val citycode = intent.getStringExtra("citycode").toString()
 
         binding.BusStationName.text = favoriteStationName
 
-        CoroutineScope(Dispatchers.Main).launch {
-            Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode , favoritenodenum,
-                mymodel = { busitem->
-                    DFadapter = Bus_DeepFavoriteAdapter()
 
-                    busViewmodel.setStationInfoItem(busitem)
+        CoroutineScope(Dispatchers.Main).launch {
+            Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,
+                favoritenodenum,
+                resultmodel = { resultbusitem ->
+                    busStationInfo_Adapater = BusStationInfo_Adpater()
+
+                    //viewmodelCall
+                    busViewmodel.setStationInfoItem(resultbusitem)
 
                     busViewmodel.stationinfoItem.observe(
                         this@Bus_FavroiteDeepInfo_Activity,
-                        Observer { setbusitem->
+                        Observer { setbusitem ->
                             binding.FravroitestationinfoRecyclerView.apply {
-                                adapter = DFadapter
+                                adapter = busStationInfo_Adapater
                                 layoutManager = LinearLayoutManager(context)
-                                DFadapter.submitlist(setbusitem)
+                                busStationInfo_Adapater.submitList(setbusitem)
                             }
                         })
-
                 })
+
         }
+
     }
 
-
-    //버스 정류장명(이름)에 대한 정보 가져오기 함수 불러오기 및 Recyclerview Set
-    private fun BusfavoriteRecyclerViewSet(){
-        val favoritenodenum = intent.getStringExtra("favoritenodenum").toString()
-        val favoriteStationName = intent.getStringExtra("favoriteStationName").toString()
-        val citycode = intent.getStringExtra("citycode").toString()
-
-        binding.BusStationName.text = favoriteStationName
-
-        Retrofit_Manager.retrofitManager.getbusStationInfoCall(citycode , favoritenodenum,
-        mymodel = { busitem->
-            DFadapter = Bus_DeepFavoriteAdapter()
-
-            busViewmodel.setStationInfoItem(busitem)
-
-            busViewmodel.stationinfoItem.observe(
-                this@Bus_FavroiteDeepInfo_Activity,
-                Observer { setbusitem->
-                    binding.FravroitestationinfoRecyclerView.apply {
-                        adapter = DFadapter
-                        layoutManager = LinearLayoutManager(context)
-                        DFadapter.submitlist(setbusitem)
-                    }
-                })
-
-        })
-    }
 
     private fun SetFreshView() {
         binding.BusFavroiteSwipe.setOnRefreshListener {
-//            BusfavoriteRecyclerViewSet()
             CoroutineBusfavoriteRecyclerViewSet()
             binding.BusFavroiteSwipe.isRefreshing = false
         }
