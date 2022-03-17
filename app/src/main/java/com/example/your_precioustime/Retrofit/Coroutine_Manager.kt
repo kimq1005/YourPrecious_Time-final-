@@ -38,15 +38,10 @@ class Coroutine_Manager {
         )
 
 
-
+        val stationitem = call.body()!!.body.items.item
 
         if (call.isSuccessful) {
-            val stationitem = call.body()!!.body.items.item
-
-
-            if (stationitem != null) {
-                mymodel(stationitem)
-            }
+            mymodel(stationitem)
 
 
         } else {
