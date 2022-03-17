@@ -16,13 +16,13 @@ import com.example.your_precioustime.Retrofit.Retrofit_Manager
 
 import com.example.your_precioustime.databinding.ActivityBusStationInfoBinding
 import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.lang.Exception
+import kotlin.coroutines.CoroutineContext
 
 
 @SuppressLint("StaticFieldLeak")
-class Bus_StationInfo_Activity : AppCompatActivity() {
+class Bus_StationInfo_Activity : AppCompatActivity(), CoroutineScope {
 
     private var busStationinfoBinding: ActivityBusStationInfoBinding? = null
     private val binding get() = busStationinfoBinding!!
@@ -34,13 +34,24 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
     private lateinit var busViewmodel: Bus_ViewModel
     private lateinit var busRoomviewmodel: Bus_RoomViewModel
 
+    private lateinit var job: Job
+
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         busStationinfoBinding = ActivityBusStationInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        job = Job()
+
         busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
-        busRoomviewmodel = ViewModelProvider(this, Bus_RoomViewModel.Factory(application)).get(Bus_RoomViewModel::class.java)
+        busRoomviewmodel = ViewModelProvider(
+            this,
+            Bus_RoomViewModel.Factory(application)
+        ).get(Bus_RoomViewModel::class.java)
 
         binding.backbtn.setOnClickListener {
             onBackPressed()
@@ -55,7 +66,6 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         busFavoriteChecking()
 
 
-
         Myobject.myobject.ToggleSet(
             this,
             binding.floatingBtn,
@@ -67,7 +77,7 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 
     }
 
-    private fun MapsActivityIntent(){
+    private fun MapsActivityIntent() {
         binding.locationcardView.setOnClickListener {
             val stationName = intent.getStringExtra("stationName")
             val stationnodenode = intent.getStringExtra("stationnodenode")
@@ -99,26 +109,37 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
         val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
-                resultmodel = { resultbusitem->
-                    busStationInfo_Adapater = BusStationInfo_Adpater()
+        launch(coroutineContext) {
+            try {
+                withContext(Dispatchers.Main) {
+                    Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,
+                        stationNodeNumber,
+                        resultmodel = { resultbusitem ->
+                            busStationInfo_Adapater = BusStationInfo_Adpater()
 
-                    //viewmodelCall
-                    busViewmodel.setStationInfoItem(resultbusitem)
+                            //viewmodelCall
+                            busViewmodel.setStationInfoItem(resultbusitem)
 
-                    busViewmodel.stationinfoItem.observe(
-                        this@Bus_StationInfo_Activity,
-                        Observer {  setbusitem->
-                            binding.BusStationInfoRecyclerView.apply {
-                                adapter = busStationInfo_Adapater
-                                layoutManager = LinearLayoutManager(context)
-                                busStationInfo_Adapater.submitList(setbusitem)
-                            }
+                            busViewmodel.stationinfoItem.observe(
+                                this@Bus_StationInfo_Activity,
+                                Observer { setbusitem ->
+                                    binding.BusStationInfoRecyclerView.apply {
+                                        adapter = busStationInfo_Adapater
+                                        layoutManager = LinearLayoutManager(context)
+                                        busStationInfo_Adapater.submitList(setbusitem)
+                                    }
+                                })
                         })
-                })
+
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@Bus_StationInfo_Activity, "Error", Toast.LENGTH_SHORT).show()
+                finish()
+            }
 
         }
+
 
     }
 
@@ -150,7 +171,6 @@ class Bus_StationInfo_Activity : AppCompatActivity() {
 //                })
 //        })
 //    }
-
 
 
     //버스 즐겨찾기 추가

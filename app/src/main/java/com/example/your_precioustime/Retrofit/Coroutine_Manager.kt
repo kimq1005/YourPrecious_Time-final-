@@ -37,15 +37,11 @@ class Coroutine_Manager {
             citycode, stationName, nodeno
         )
 
-
         val stationitem = call.body()!!.body.items.item
 
         if (call.isSuccessful) {
             mymodel(stationitem)
-
-
-        } else {
-            Log.d(TAG, "getCoroutinegetbusCall: 오류")
+            
         }
 
 

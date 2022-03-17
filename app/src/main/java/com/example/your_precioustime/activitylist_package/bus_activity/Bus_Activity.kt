@@ -53,8 +53,7 @@ class Bus_Activity : AppCompatActivity(), CoroutineScope {
         }
 
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-//        CorutinesetLiveDataRecyclerView(citycode, null)
-        ScopeCorutinesetLiveDataRecyclerView(citycode, null)
+        CorutinesetLiveDataRecyclerView(citycode, null)
 //        setLiveDataRecyclerView(citycode, null)
         bus_ViewModel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
 
@@ -72,31 +71,9 @@ class Bus_Activity : AppCompatActivity(), CoroutineScope {
 
     }
 
+
     //코루틴을 활용한 recyclerViewSet
     private fun CorutinesetLiveDataRecyclerView(citycode: String, stationName: String?) {
-        CoroutineScope(Dispatchers.Main).launch {
-            Coroutine_Manager.coroutineManager.getCoroutinegetbusCall(citycode, stationName, null,
-                mymodel = { stationitem ->
-                    busStationSearchAdapter = Bus_Station_Search_Adapter()
-
-                    bus_ViewModel.setStationBusItem(stationitem)
-
-                    bus_ViewModel.stationItem.observe(this@Bus_Activity, Observer {
-                        binding.busRecyclerView.apply {
-                            adapter = busStationSearchAdapter
-                            layoutManager = LinearLayoutManager(context)
-                            busStationSearchAdapter.submitList(it)
-                        }
-                    })
-
-                })
-
-        }
-
-    }
-
-    //코루틴을 활용한 recyclerViewSet
-    private fun ScopeCorutinesetLiveDataRecyclerView(citycode: String, stationName: String?) {
 
         launch(coroutineContext) {
             try {
@@ -155,8 +132,7 @@ class Bus_Activity : AppCompatActivity(), CoroutineScope {
             val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
             val StationEditName = binding.SearchEditText.text.toString()
 //            setLiveDataRecyclerView(citycode, StationEditName)
-//            CorutinesetLiveDataRecyclerView(citycode,StationEditName)
-            ScopeCorutinesetLiveDataRecyclerView(citycode, StationEditName)
+            CorutinesetLiveDataRecyclerView(citycode, StationEditName)
         }
 
     }

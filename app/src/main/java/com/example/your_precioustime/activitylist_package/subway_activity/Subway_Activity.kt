@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,15 +25,15 @@ import com.example.your_precioustime.Util.Companion.TAG
 import com.example.your_precioustime.databinding.ActivitySubwayBinding
 import com.example.your_precioustime.roompackage.subway_room.SubwayFavoriteEntity
 import com.example.your_precioustime.roompackage.subway_room.Subway_FavoriteViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.Exception
+import kotlin.coroutines.CoroutineContext
 
 
 @SuppressLint("StaticFieldLeak")
-class Subway_Activity : AppCompatActivity() {
+class Subway_Activity : AppCompatActivity() , CoroutineScope {
 
     private var subwayBinding: ActivitySubwayBinding? = null
     private val binding get() = subwayBinding!!
@@ -41,10 +42,17 @@ class Subway_Activity : AppCompatActivity() {
     private lateinit var subwayViewModel: SubwayViewModel
     private lateinit var subwayRoomViewModel: Subway_FavoriteViewModel
 
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         subwayBinding = ActivitySubwayBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        job = Job()
 
         subwayViewModel = ViewModelProvider(this).get(SubwayViewModel::class.java)
         subwayRoomViewModel =
@@ -107,26 +115,33 @@ class Subway_Activity : AppCompatActivity() {
         val subtitle = binding.subtitleTextView
         val favoriteimage = binding.subwayfavroiteAddImageView
 
-        CoroutineScope(Dispatchers.Main).launch {
-            Coroutine_Manager.coroutineManager.CoroutinegetsubwayCall(
-                statNm,
-                snackview,
-                subtitle,
-                favoriteimage,
-                mymodel = { subwaymodel ->
-                    subwayAdapter = SubwayAdapter()
+        launch(coroutineContext) {
+            try {
+                withContext(Dispatchers.Main){
+                    Coroutine_Manager.coroutineManager.CoroutinegetsubwayCall(
+                        statNm,
+                        snackview,
+                        subtitle,
+                        favoriteimage,
+                        mymodel = { subwaymodel ->
+                            subwayAdapter = SubwayAdapter()
 
-                    subwayViewModel.setSubwayItem(subwaymodel)
-                    subwayViewModel.subwayItem.observe(this@Subway_Activity, Observer {
-                        binding.subwayRecyclerView.apply {
-                            adapter = subwayAdapter
-                            layoutManager = LinearLayoutManager(this@Subway_Activity)
-                            subwayAdapter.submitList(it)
-                        }
-                    })
+                            subwayViewModel.setSubwayItem(subwaymodel)
+                            subwayViewModel.subwayItem.observe(this@Subway_Activity, Observer {
+                                binding.subwayRecyclerView.apply {
+                                    adapter = subwayAdapter
+                                    layoutManager = LinearLayoutManager(this@Subway_Activity)
+                                    subwayAdapter.submitList(it)
+                                }
+                            })
 
-                })
+                        })
+                }
 
+            }catch (e :Exception){
+                e.printStackTrace()
+                Toast.makeText(this@Subway_Activity , "정류장(역)명을 다시 입력해주세요", Toast.LENGTH_SHORT).show()
+            }
         }
 
 
@@ -197,6 +212,7 @@ class Subway_Activity : AppCompatActivity() {
 
         })
     }
+
 
 
 }

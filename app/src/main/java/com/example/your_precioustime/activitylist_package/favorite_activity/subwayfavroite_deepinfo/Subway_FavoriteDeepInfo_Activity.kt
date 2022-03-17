@@ -2,6 +2,7 @@ package com.example.your_precioustime.activitylist_package.favorite_activity.sub
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,12 +15,12 @@ import com.example.your_precioustime.Retrofit.Retrofit_Manager
 import com.example.your_precioustime.Url
 import com.example.your_precioustime.activitylist_package.subway_activity.SubwayViewModel
 import com.example.your_precioustime.databinding.ActivitySubwayFavoriteDeepInfoBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.lang.Exception
+import kotlin.coroutines.CoroutineContext
 
 
-class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() {
+class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() , CoroutineScope {
 
     private var SubwayFavroiteDeepInfoBinding: ActivitySubwayFavoriteDeepInfoBinding? = null
     private val binding get() = SubwayFavroiteDeepInfoBinding!!
@@ -28,12 +29,19 @@ class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() {
     lateinit var subwayAdapter: SubwayAdapter
     private lateinit var subwayViewModel: SubwayViewModel
 
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SubwayFavroiteDeepInfoBinding =
             ActivitySubwayFavoriteDeepInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        job = Job()
 
         subwayViewModel = ViewModelProvider(this).get(SubwayViewModel::class.java)
 
@@ -66,21 +74,31 @@ class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() {
     private fun CoroutinesetRecyclearView(){
         val subwayname = intent.getStringExtra("subwayname").toString()
         binding.SubwayStationName.text = subwayname
-        CoroutineScope(Dispatchers.Main).launch {
-            Coroutine_Manager.coroutineManager.CoroutinegetsubwayCall(subwayname,null,null,null,
-                mymodel = { subwaymodel ->
-                    subwayAdapter = SubwayAdapter()
 
-                    subwayViewModel.setSubwayItem(subwaymodel)
-                    subwayViewModel.subwayItem.observe(this@Subway_FravoriteDeepInfo_Activity , Observer {
-                        binding.SubwayFVDeepInFoRecyclerView.apply {
-                            adapter = subwayAdapter
-                            layoutManager = LinearLayoutManager(this@Subway_FravoriteDeepInfo_Activity)
-                            subwayAdapter.submitList(it)
-                        }
-                    })
 
-                })
+        launch(coroutineContext) {
+            try {
+                withContext(Dispatchers.Main){
+                    Coroutine_Manager.coroutineManager.CoroutinegetsubwayCall(subwayname,null,null,null,
+                        mymodel = { subwaymodel ->
+                            subwayAdapter = SubwayAdapter()
+
+                            subwayViewModel.setSubwayItem(subwaymodel)
+                            subwayViewModel.subwayItem.observe(this@Subway_FravoriteDeepInfo_Activity , Observer {
+                                binding.SubwayFVDeepInFoRecyclerView.apply {
+                                    adapter = subwayAdapter
+                                    layoutManager = LinearLayoutManager(this@Subway_FravoriteDeepInfo_Activity)
+                                    subwayAdapter.submitList(it)
+                                }
+                            })
+
+                        })
+                }
+            }catch (e:Exception){
+                e.printStackTrace()
+                Toast.makeText(this@Subway_FravoriteDeepInfo_Activity,"Error",Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
 
     }
@@ -106,5 +124,7 @@ class Subway_FravoriteDeepInfo_Activity : AppCompatActivity() {
         })
 
     }
+
+
 
 }

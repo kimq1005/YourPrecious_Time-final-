@@ -22,14 +22,14 @@ import com.example.your_precioustime.activitylist_package.bus_activity.BusStatio
 import com.example.your_precioustime.activitylist_package.bus_activity.Bus_ViewModel
 import com.example.your_precioustime.databinding.ActivityBusFavroiteDeepInfoBinding
 import com.example.your_precioustime.roompackage.bus_room.Bus_RoomViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.Exception
+import kotlin.coroutines.CoroutineContext
 
 
-class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
+class Bus_FavroiteDeepInfo_Activity : AppCompatActivity(), CoroutineScope {
     private var busFavroiteDeepInfoBinding: ActivityBusFavroiteDeepInfoBinding? = null
     private val binding get() = busFavroiteDeepInfoBinding!!
 
@@ -37,11 +37,17 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
 
     private lateinit var busViewmodel: Bus_ViewModel
 
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         busFavroiteDeepInfoBinding = ActivityBusFavroiteDeepInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        job = Job()
         busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
 
 
@@ -77,27 +83,34 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
 
         binding.BusStationName.text = favoriteStationName
 
+        launch(coroutineContext) {
+            try {
+                withContext(Dispatchers.Main) {
+                    Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,
+                        favoritenodenum,
+                        resultmodel = { resultbusitem ->
+                            busStationInfo_Adapater = BusStationInfo_Adpater()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,
-                favoritenodenum,
-                resultmodel = { resultbusitem ->
-                    busStationInfo_Adapater = BusStationInfo_Adpater()
+                            //viewmodelCall
+                            busViewmodel.setStationInfoItem(resultbusitem)
 
-                    //viewmodelCall
-                    busViewmodel.setStationInfoItem(resultbusitem)
-
-                    busViewmodel.stationinfoItem.observe(
-                        this@Bus_FavroiteDeepInfo_Activity,
-                        Observer { setbusitem ->
-                            binding.FravroitestationinfoRecyclerView.apply {
-                                adapter = busStationInfo_Adapater
-                                layoutManager = LinearLayoutManager(context)
-                                busStationInfo_Adapater.submitList(setbusitem)
-                            }
+                            busViewmodel.stationinfoItem.observe(
+                                this@Bus_FavroiteDeepInfo_Activity,
+                                Observer { setbusitem ->
+                                    binding.FravroitestationinfoRecyclerView.apply {
+                                        adapter = busStationInfo_Adapater
+                                        layoutManager = LinearLayoutManager(context)
+                                        busStationInfo_Adapater.submitList(setbusitem)
+                                    }
+                                })
                         })
-                })
-
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@Bus_FavroiteDeepInfo_Activity, "Error", Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
         }
 
     }
@@ -109,5 +122,6 @@ class Bus_FavroiteDeepInfo_Activity : AppCompatActivity() {
             binding.BusFavroiteSwipe.isRefreshing = false
         }
     }
+
 
 }

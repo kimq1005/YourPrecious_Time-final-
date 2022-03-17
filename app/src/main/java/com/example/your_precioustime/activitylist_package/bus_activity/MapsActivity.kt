@@ -31,14 +31,14 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.example.your_precioustime.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.Exception
+import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("StaticFieldLeak")
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, CoroutineScope {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -50,11 +50,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var busViewmodel: Bus_ViewModel
 
+    private lateinit var job: Job
+
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        job = Job()
 
         busViewmodel = ViewModelProvider(this).get(Bus_ViewModel::class.java)
 
@@ -64,9 +72,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         setMap()
-//        setBusStationRecyclerView()
         CoroutineSetBusStationRecyclerView()
-        SetmapView()
+//        SetmapView()
+        CoroutineSetmapView()
         BusrefreshView()
 
 
@@ -74,7 +82,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun BusrefreshView() {
         binding.myrefreshView.setOnRefreshListener {
-//            setBusStationRecyclerView()
             CoroutineSetBusStationRecyclerView()
             binding.myrefreshView.isRefreshing = false
         }
@@ -91,58 +98,51 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-
     //맵 정보 펼치기
-    fun SetmapView() = with(binding) {
-        val stationname = intent.getStringExtra("stationName")
+    private fun CoroutineSetmapView() {
         val stationnodenode = intent.getStringExtra("stationnodenode")
-        Log.d(TAG, "SetmapView: $stationname , $stationnodenode")
 
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
 
-        val stationcalls = retrofitInterface.StationNameGet(
-            cityCode = citycode,
-            staionName = null,
-            nodeNo = stationnodenode
-        )
 
-        stationcalls.enqueue(object : retrofit2.Callback<StationBus> {
 
-            override fun onResponse(call: Call<StationBus>, response: Response<StationBus>) {
-                val body = response.body()
+        launch(coroutineContext) {
+            try {
+                withContext(Dispatchers.Main) {
+                    val stationcall =
+                        retrofitInterface.CoroutineStationNameGet(citycode, null, stationnodenode)
+                    val body = stationcall.body()
 
-                val myLocationlatlng = LatLngBounds.Builder()
+                    val myLocationlatlng = LatLngBounds.Builder()
 
-                body?.let { it ->
-                    val hello = body.body.items.item
+                    body?.let {
+                        val stationitem = body.body.items.item
 
-                    for (i in hello.indices) {
-                        val xLocation = hello.get(i).gpslati?.toDouble()!!
-                        val yLocation = hello.get(i).gpslong?.toDouble()!!
-                        val mapStationname = hello.get(i).nodenm?.toString()!!
-                        val position = LatLng(xLocation, yLocation)
+                        for (i in stationitem.indices) {
+                            val xLocation = stationitem.get(i).gpslati?.toDouble()!!
+                            val yLocation = stationitem.get(i).gpslong?.toDouble()!!
+                            val mapStationname = stationitem.get(i).nodenm?.toString()!!
+                            val position = LatLng(xLocation, yLocation)
 
-                        val marker = MarkerOptions().position(position).title(mapStationname)
-                        mMap.addMarker(marker)
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 18f))
-                        myLocationlatlng.include(position)
+                            val marker = MarkerOptions().position(position).title(mapStationname)
+                            mMap.addMarker(marker)
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 18f))
+                            myLocationlatlng.include(position)
 
+                        }
                     }
-
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@MapsActivity, "Error", Toast.LENGTH_SHORT).show()
             }
-
-            override fun onFailure(call: Call<StationBus>, t: Throwable) {
-                Log.d(TAG, "onFailure:$t")
-
-            }
-
-        })
+        }
 
 
     }
 
-    private fun CoroutineSetBusStationRecyclerView(){
+
+    private fun CoroutineSetBusStationRecyclerView() {
 
         val stationName = intent.getStringExtra("stationName").toString()
         binding.BusStationName.text = stationName
@@ -150,59 +150,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
         val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
 
-        CoroutineScope(Dispatchers.Main).launch {
-           Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,stationNodeNumber,
-               resultmodel ={resultmodel->
-                   busStationInfo_Adapater = BusStationInfo_Adpater()
+        launch(coroutineContext) {
+            try {
+                withContext(Dispatchers.Main) {
+                    Coroutine_Manager.coroutineManager.CoroutinegetbusStationInfoCall(citycode,
+                        stationNodeNumber,
+                        resultmodel = { resultmodel ->
+                            busStationInfo_Adapater = BusStationInfo_Adpater()
 
-                   //viewmodelCall
-                   busViewmodel.setStationInfoItem(resultmodel)
+                            //viewmodelCall
+                            busViewmodel.setStationInfoItem(resultmodel)
 
 
-                   busViewmodel.stationinfoItem.observe(
-                       this@MapsActivity,
-                       Observer {  setbusitem->
-                           binding.busreclerView.apply {
-                               adapter = busStationInfo_Adapater
-                               layoutManager = LinearLayoutManager(context)
-                               busStationInfo_Adapater.submitList(setbusitem)
-                           }
-                       })
-               })
-
+                            busViewmodel.stationinfoItem.observe(
+                                this@MapsActivity,
+                                Observer { setbusitem ->
+                                    binding.busreclerView.apply {
+                                        adapter = busStationInfo_Adapater
+                                        layoutManager = LinearLayoutManager(context)
+                                        busStationInfo_Adapater.submitList(setbusitem)
+                                    }
+                                })
+                        })
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@MapsActivity, "Error", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
 
+
     }
-
-
-
-
-//    private fun setBusStationRecyclerView(){
-//        val stationName = intent.getStringExtra("stationName").toString()
-//        binding.BusStationName.text = stationName
-//
-//        val stationNodeNumber = intent.getStringExtra("stationNodeNumber").toString()
-//        val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
-//
-//        Retrofit_Manager.retrofitManager.getbusStationInfoCall(citycode,stationNodeNumber,
-//            mymodel = { busitem->
-//                busStationInfo_Adapater = BusStationInfo_Adpater()
-//
-//                //viewmodelCall
-//                busViewmodel.setStationInfoItem(busitem)
-//
-//
-//                busViewmodel.stationinfoItem.observe(
-//                    this@MapsActivity,
-//                    Observer {  setbusitem->
-//                        binding.busreclerView.apply {
-//                            adapter = busStationInfo_Adapater
-//                            layoutManager = LinearLayoutManager(context)
-//                            busStationInfo_Adapater.submitList(setbusitem)
-//                        }
-//                    })
-//            })
-//    }
 
 
 }
