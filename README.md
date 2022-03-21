@@ -79,11 +79,6 @@
   <img src = "https://user-images.githubusercontent.com/68366753/158539666-cb1849df-5f0e-4724-8672-4e3a06373d08.png" width="20%" height="20%">
  
 
-<!-- 
-<img width="361" alt="image" src="https://user-images.githubusercontent.com/68366753/158539987-e2f3b38a-c29b-430d-86ef-9aa23a9f547d.png">
- -->
- 
-
 * 즐겨찾기  
   
   <img src = "https://user-images.githubusercontent.com/68366753/154833778-2555b0fb-5ad0-4151-9f2a-69a81e93b436.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/158539987-e2f3b38a-c29b-430d-86ef-9aa23a9f547d.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/154833814-9eeed1a5-78d2-4b4a-976a-b6c8145bc3ca.png" width="20%" height="20%">  
