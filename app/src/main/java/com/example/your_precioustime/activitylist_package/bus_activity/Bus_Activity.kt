@@ -93,6 +93,7 @@ class Bus_Activity : AppCompatActivity(), CoroutineScope {
                                     busStationSearchAdapter.submitList(it)
                                 }
                             })
+                            //
 
                         })
                 }
