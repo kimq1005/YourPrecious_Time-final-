@@ -4,7 +4,7 @@
 
 프로젝트는 총 2차로 구성했습니다. 
 
-1차. 초기 기획안으로 프로젝트 완성 (2021.10 ~ 2022.02 End)  https://github.com/kimq1005/Your_PreciousTime (End).  
+1차. 초기 기획안으로 프로젝트 완성 (2021.10 ~ 2022.02 End)  https://github.com/kimq1005/Your_PreciousTime.
 
 2차. 클린 코딩 및 코드 리펙토링을 통한 성능향상 (2022.02 ~ Ing).
 
@@ -34,6 +34,7 @@
 # 📖배운점(2차)
 * MVVM패턴을 도입함으로써 이에 대한 이점과 개념을 알 수 있었음.
 * JetPack(DataBinding, LiveData, ViewModel, Room)의 사용법과 이점을 알게 되었음.
+* Coroutine 도입으로 편리한 비동기처리가 가능함.
 * 싱글톤 패턴을 적극 사용함으로써 이에 대한 이점을 알 수 있었고 반복코드를 줄일 수 있었음.
 * 주석 작성의 중요성을 깨닫게 되었음. 
 
@@ -76,11 +77,6 @@
   <img src = "https://user-images.githubusercontent.com/68366753/154833313-2a0e1467-56d8-444a-8d4e-65f875c1fce5.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/154833623-b78084e8-0876-481e-81ee-37095d575020.png" width="20%" height="20%">  <img src = "https://user-images.githubusercontent.com/68366753/158539438-603df3ab-bbe9-4bb9-958d-98fc65828822.png" width="20%" height="20%">
   <img src = "https://user-images.githubusercontent.com/68366753/154833703-77f69573-f9a3-4a9e-be57-328d5554961b.png" width="20%" height="20%">
   <img src = "https://user-images.githubusercontent.com/68366753/158539666-cb1849df-5f0e-4724-8672-4e3a06373d08.png" width="20%" height="20%">
- 
-
-<!-- 
-<img width="361" alt="image" src="https://user-images.githubusercontent.com/68366753/158539987-e2f3b38a-c29b-430d-86ef-9aa23a9f547d.png">
- -->
  
 
 * 즐겨찾기  
