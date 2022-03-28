@@ -83,12 +83,13 @@ class Subway_Activity : AppCompatActivity() , CoroutineScope {
     private fun subwaySwipe() {
         binding.subwaySwipe.setOnRefreshListener {
             val searchtext = binding.SearchEditText.text.toString()
+            val replaceSearchtext = searchtext.replace(" ", "")
             binding.subtitleTextView.text = searchtext
             binding.subwayfavroiteAddImageView.visibility = View.VISIBLE
             binding.subtitleTextView.visibility = View.VISIBLE
 
 //            subwaySetRecyclerView(searchtext)
-            CoroutinesubwaySetRecyclerView(searchtext)
+            CoroutinesubwaySetRecyclerView(replaceSearchtext)
 
             binding.subwaySwipe.isRefreshing = false
         }
@@ -99,12 +100,13 @@ class Subway_Activity : AppCompatActivity() , CoroutineScope {
             subwayFavoriteChecking()
 
             val searchtext = binding.SearchEditText.text.toString()
+            val replaceSearchText = searchtext.replace(" ", "")
             binding.subtitleTextView.text = searchtext
             binding.subwayfavroiteAddImageView.visibility = View.VISIBLE
             binding.subtitleTextView.visibility = View.VISIBLE
             binding.secondunderline.visibility = View.VISIBLE
 //            subwaySetRecyclerView(searchtext)
-            CoroutinesubwaySetRecyclerView(searchtext)
+            CoroutinesubwaySetRecyclerView(replaceSearchText)
 
         }
     }

@@ -132,8 +132,9 @@ class Bus_Activity : AppCompatActivity(), CoroutineScope {
         binding.clickhere.setOnClickListener {
             val citycode = citycodeSaveClass.citycodeSaveClass.Loadcitycode("citycode", "citycode")
             val StationEditName = binding.SearchEditText.text.toString()
+            val ReplaceStationName = StationEditName.replace(" ", "")
 //            setLiveDataRecyclerView(citycode, StationEditName)
-            CorutinesetLiveDataRecyclerView(citycode, StationEditName)
+            CorutinesetLiveDataRecyclerView(citycode, ReplaceStationName)
         }
 
     }

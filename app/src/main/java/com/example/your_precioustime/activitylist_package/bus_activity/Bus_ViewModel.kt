@@ -42,7 +42,6 @@ class Bus_ViewModel : ViewModel() {
     // Bus_StationInfo의 데이터
     fun setStationInfoItem(list: List<ResultBusItem>) {
         _stationinfoItem.value = list
-
     }
 
 
