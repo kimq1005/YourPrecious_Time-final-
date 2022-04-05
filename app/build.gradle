@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -99,4 +100,7 @@ dependencies {
 
     // LiveData - 데이터의 변경 사항을 알 수 있음
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
+
+    implementation platform('com.google.firebase:firebase-bom:29.2.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

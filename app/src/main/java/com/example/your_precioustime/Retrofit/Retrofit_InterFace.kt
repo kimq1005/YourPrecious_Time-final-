@@ -39,8 +39,6 @@ interface Retrofit_InterFace {
 
 
 
-
-
     @GET(Url.BUS_NAME_SEARCH)
     suspend fun CoroutineStationNameGet(
         @Query("cityCode") cityCode:String,

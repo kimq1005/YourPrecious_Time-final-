@@ -16,6 +16,7 @@ import com.example.your_precioustime.activitylist_package.bus_activity.Bus_Activ
 import com.example.your_precioustime.activitylist_package.favorite_activity.FavroiteActivity
 import com.example.your_precioustime.activitylist_package.subway_activity.Subway_Activity
 import com.example.your_precioustime.databinding.ActivityRealMainListBinding
+import com.example.your_precioustime.firebase_Package.LoginActivity
 import com.google.android.material.snackbar.Snackbar
 
 class RealMainListActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -69,6 +70,11 @@ class RealMainListActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
         binding.emailInquiriesLinearlayout.setOnClickListener {
             shareEmail()
+        }
+
+        binding.logintextview.setOnClickListener {
+            val intent = Intent(this , LoginActivity::class.java)
+            startActivity(intent)
         }
 
     }
