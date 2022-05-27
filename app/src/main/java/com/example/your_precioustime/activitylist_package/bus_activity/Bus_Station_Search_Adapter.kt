@@ -2,8 +2,10 @@ package com.example.your_precioustime.activitylist_package.bus_activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.text.TextPaint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.your_precioustime.mo_del.StationItem
 import com.example.your_precioustime.databinding.BusStationSearchitemLayoutBinding
@@ -35,6 +37,10 @@ class Bus_Station_Search_Adapter : RecyclerView.Adapter<Bus_Station_Search_Adapt
         val stationName = stationItem?.get(position)?.nodenm.toString()
         val stationnodenode = stationItem?.get(position)?.nodeno.toString()
         val stationNodeNumber = stationItem?.get(position)?.nodeid.toString()
+
+//        holder.binding.StationNameTextView.setOnClickListener {
+//            Toast.makeText(holder.itemView.context,"test",Toast.LENGTH_SHORT).show()
+//        }
 
         holder.itemView.setOnClickListener {
 

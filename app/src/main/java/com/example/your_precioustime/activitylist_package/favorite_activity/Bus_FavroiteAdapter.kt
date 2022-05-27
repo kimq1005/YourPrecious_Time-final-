@@ -12,7 +12,6 @@ import com.example.your_precioustime.SecondActivity.DB.OnDeleteInterFace
 import com.example.your_precioustime.activitylist_package.favorite_activity.busfavroite_deepinfo.Bus_FavroiteDeepInfo_Activity
 import com.example.your_precioustime.databinding.BusFavoritelistItemBinding
 import com.example.your_precioustime.roompackage.bus_room.BusFavoriteEntity
-import kotlinx.android.synthetic.main.subwayfavoritelist_item.view.*
 
 
 class Bus_FavroiteAdapter(var onBusFavroiteListDeleteInterFace: OnBusFavroiteListDeleteInterFace) : RecyclerView.Adapter<Bus_FavroiteAdapter.BusFavoriteViewHolder>() {
@@ -56,10 +55,10 @@ class Bus_FavroiteAdapter(var onBusFavroiteListDeleteInterFace: OnBusFavroiteLis
         }
 
 
-        holder.itemView.stardeletebtn.setOnClickListener {
-            onBusFavroiteListDeleteInterFace.onDeleteBusFavoriteList(busfavoriteModelList)
-            Myobject.myobject.deletestation(holder.itemView)
-        }
+//        holder.itemView.stardeletebtn.setOnClickListener {
+//            onBusFavroiteListDeleteInterFace.onDeleteBusFavoriteList(busfavoriteModelList)
+//            Myobject.myobject.deletestation(holder.itemView)
+//        }
     }
 
     override fun getItemCount(): Int {
