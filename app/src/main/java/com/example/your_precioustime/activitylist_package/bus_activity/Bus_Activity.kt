@@ -67,6 +67,8 @@ class Bus_Activity : AppCompatActivity(), CoroutineScope {
             binding.BusfloatBtn
         )
 
+
+        //잘되니?
         ClickSearchBtn()
 
     }
