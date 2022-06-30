@@ -68,6 +68,7 @@ class Bus_Activity : AppCompatActivity(), CoroutineScope {
         )
 
         ClickSearchBtn()
+        //요것도?
 
     }
 
