@@ -81,6 +81,7 @@ class Coroutine_Manager {
 
 
             //같은 버스의 정보가 연속으로 두개가 나와서 짝수, 홀수로 나눈다음 도착시간에 따른 우선순위에 따른 리스트를 가져옴
+            //너는 아직 안바꾼 브런치야 ㅇㅋ?
             val firstList = mutableItemList.filterIndexed { index, i ->
 
                 index % 2 == 0
