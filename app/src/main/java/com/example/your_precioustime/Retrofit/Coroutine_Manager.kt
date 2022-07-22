@@ -41,7 +41,6 @@ class Coroutine_Manager {
 
         if (call.isSuccessful) {
             mymodel(stationitem)
-            
         }
 
 
