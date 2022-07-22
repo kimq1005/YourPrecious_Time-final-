@@ -61,7 +61,6 @@ class BusStationInfo_Adpater : RecyclerView.Adapter<BusStationInfo_Adpater.MyVie
             holder.bind(it)
         }
 
-
     }
 
 

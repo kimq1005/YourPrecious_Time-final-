@@ -68,7 +68,6 @@ class Myobject {
             val subString = four.substring(0..3)
             return subString
 
-
         }
         return mytext
     }
