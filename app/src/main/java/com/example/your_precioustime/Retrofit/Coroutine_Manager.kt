@@ -75,6 +75,7 @@ class Coroutine_Manager {
                 )
 
             }
+            //adsfjhsduifhzskjdfhuzsdkjfhsuzdf
 
             Log.d(Util.TAG, "\n 전체값 리스트 : $mutableItemList \n")
 
