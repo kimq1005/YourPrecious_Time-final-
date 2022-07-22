@@ -23,7 +23,7 @@ class Coroutine_Manager {
     private var busretrofitInterface: Retrofit_InterFace =
         Retrofit_Client.getClient(Url.BUS_MAIN_URL).create(Retrofit_InterFace::class.java)
 
-
+    //yeahtestman test brnahc
     //코루틴을 활용한 버스 정류장명(이름) 가져오기 함수
     suspend fun getCoroutinegetbusCall(
         citycode: String,
